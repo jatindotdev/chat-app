@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat App</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section class="login">
+        <h1>Chat App</h1>
+        <div class="login-card">
+          <p>Maybe you&apos;re not logged in! Click to login</p>
+          <div class="buttons">
+            <button class="login">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                style="fill: rgba(255, 255, 255, 1)"
+              >
+                <path
+                  d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"
+                ></path></svg
+              >Google
+            </button>
+            <button class="sign-out">Sign Out</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="loader">
+      <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+      <svg
+        width="44"
+        height="44"
+        viewBox="0 0 44 44"
+        xmlns="http://www.w3.org/2000/svg"
+        stroke="#fff"
+      >
+        <g fill="none" fill-rule="evenodd" stroke-width="2">
+          <circle cx="22" cy="22" r="1">
+            <animate
+              attributeName="r"
+              begin="0s"
+              dur="1.8s"
+              values="1; 20"
+              calcMode="spline"
+              keyTimes="0; 1"
+              keySplines="0.165, 0.84, 0.44, 1"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="stroke-opacity"
+              begin="0s"
+              dur="1.8s"
+              values="1; 0"
+              calcMode="spline"
+              keyTimes="0; 1"
+              keySplines="0.3, 0.61, 0.355, 1"
+              repeatCount="indefinite"
+            />
+          </circle>
+          <circle cx="22" cy="22" r="1">
+            <animate
+              attributeName="r"
+              begin="-0.9s"
+              dur="1.8s"
+              values="1; 20"
+              calcMode="spline"
+              keyTimes="0; 1"
+              keySplines="0.165, 0.84, 0.44, 1"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="stroke-opacity"
+              begin="-0.9s"
+              dur="1.8s"
+              values="1; 0"
+              calcMode="spline"
+              keyTimes="0; 1"
+              keySplines="0.3, 0.61, 0.355, 1"
+              repeatCount="indefinite"
+            />
+          </circle>
+        </g>
+      </svg>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
