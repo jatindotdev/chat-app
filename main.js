@@ -15,13 +15,22 @@ const app = initializeApp({
   appId: '1:407034560466:web:64f4efb3af287b4f8cd20b',
 });
 
+const root = document.querySelector('#app');
 const userImg = document.querySelector('section.login .data img.user-img');
 const userName = document.querySelector('section.login .data h3.name');
+const loginSection = document.querySelector('section.login');
+const chatSection = document.querySelector('section.chat');
 const userEmail = document.querySelector('section.login .data p.email');
 const loginButton = document.querySelector('section.login button.login');
 const defaultLoginButton = loginButton.innerHTML;
 const signOutButton = document.querySelector('section.login button.sign-out');
+const bottomMsg = document.querySelector(
+  'section.login .login-card span.bottom-msg'
+);
 const loader = document.querySelector('.loader');
+
+// remove chat section to add later
+chatSection.remove();
 
 const signIn = () => {
   const provider = new GoogleAuthProvider();
@@ -34,7 +43,9 @@ const signOut = () => {
 };
 
 const continueToChat = () => {
-  console.log('will continue to chat page!');
+  root.appendChild(chatSection);
+  loginSection.remove();
+  chatSection.classList.add('animate');
 };
 
 const setData = (user) => {
@@ -45,10 +56,16 @@ const setData = (user) => {
   userEmail.textContent = user.email;
   loginButton.innerHTML =
     'Continue <svg class="translate" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: white"><path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path></svg>';
+  bottomMsg.textContent = 'Press enter to continue';
+  loginSection.classList.add('animate');
   loginButton.removeEventListener('click', signIn);
   loginButton.addEventListener('click', continueToChat);
   signOutButton.style.display = 'inherit';
   signOutButton.addEventListener('click', signOut);
+  window.addEventListener(
+    'keyup',
+    (e) => e.key === 'Enter' && continueToChat()
+  );
 };
 
 const auth = getAuth(app);
@@ -66,6 +83,8 @@ onAuthStateChanged(auth, (user) => {
     loginButton.removeEventListener('click', continueToChat);
     loginButton.addEventListener('click', signIn);
     signOutButton.style.display = 'none';
+    bottomMsg.textContent = '';
+    loginSection.classList.add('animate');
   }
-  loader.style.display = 'none';
+  loader.remove();
 });

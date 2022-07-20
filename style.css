@@ -136,10 +136,12 @@ body {
 }
 
 #app {
+  min-height: 100vh;
   background-image: url('/background.svg');
   background-size: 120rem;
 }
 
+/* UI buttons */
 button {
   display: flex;
   align-items: center;
@@ -173,13 +175,21 @@ button.secondary:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
+/* Login section */
 section.login {
   height: 100vh;
+  width: 100%;
+  opacity: 0;
+  transform: scale(0.8);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  transition: 0.4s;
 }
 
 section.login h1.header {
@@ -187,7 +197,7 @@ section.login h1.header {
   top: 3rem;
 }
 
-.buttons {
+section.login .buttons {
   display: flex;
   gap: 1.2rem;
 }
@@ -220,12 +230,17 @@ section.login .login-card {
   justify-content: center;
   align-items: center;
   gap: 1.4rem;
-  padding: 2rem 3rem;
+  padding: 2rem 3rem 0.5rem;
   border: 1px solid #3f3f46;
   border-radius: 8px;
   background-color: #27272a;
   box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgba(0, 0, 0, 0.3),
     0 1px 2px -1px rgba(0, 0, 0, 0.3);
+}
+
+section.login .login-card span.bottom-msg {
+  font-size: 0.75rem;
+  color: #a1a1aa;
 }
 
 section.login .data {
@@ -251,6 +266,25 @@ section.login .data p.email {
   color: #a1a1aa;
 }
 
+/* Chat section */
+section.chat {
+  height: 100vh;
+  display: flex;
+  opacity: 0;
+  transform: scale(0.8);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s;
+}
+
+/* Section animation class */
+section.animate {
+  opacity: 1;
+  transform: none;
+}
+
+/* Loaders */
 .loader {
   height: 100vh;
   width: 100vw;
@@ -262,6 +296,7 @@ section.login .data p.email {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 }
 
 .loader svg {
@@ -272,7 +307,7 @@ section.login .data p.email {
 @media screen and (max-width: 640px) {
   section.login .login-card {
     width: 100%;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 0.5rem;
     border-radius: 0;
     border-inline: none;
   }
