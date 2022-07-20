@@ -26,6 +26,18 @@
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLEj6Z1xlFd2JQEk.woff2)
+    format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
   font-weight: 700;
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7Z1xlFd2JQEk.woff2)
@@ -124,6 +136,37 @@ body {
   background-size: 120rem;
 }
 
+button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
+}
+
+button.primary {
+  background-color: #db1d70;
+  color: #ffffff;
+}
+
+button.primary:hover {
+  background-color: rgb(192, 26, 98);
+}
+
+button.secondary {
+  background-color: #27272a;
+  color: #ffffff;
+  border: 1px solid #3f3f46;
+}
+
+button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 section.login {
   height: 100vh;
   display: flex;
@@ -139,22 +182,8 @@ section.login {
   gap: 1.2rem;
 }
 
-section.login button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #db1d70;
-  color: #ffffff;
-  cursor: pointer;
-  transition: 0.2s;
-  user-select: none;
-}
-
-section.login button.login:hover {
-  background-color: rgb(192, 26, 98);
+section.login * {
+  transition: 0.4s;
 }
 
 section.login button.login svg {
@@ -162,14 +191,21 @@ section.login button.login svg {
   width: auto;
 }
 
+section.login button.login svg.translate {
+  transition: 0.4s;
+}
+
+section.login button.login:hover svg.translate {
+  transform: translate(2px);
+}
+
 section.login button.sign-out {
-  background-color: transparent;
-  border: 2px solid #db1d70;
   display: none;
 }
 
-section.login button.sign-out:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+section.login button.sign-out svg {
+  height: 20px;
+  width: auto;
 }
 
 section.login .login-card {
@@ -177,11 +213,34 @@ section.login .login-card {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1.4rem;
   padding: 2rem 3rem;
   border: 1px solid #3f3f46;
   border-radius: 8px;
   background-color: #27272a;
+}
+
+section.login .data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+section.login .data img.user-img {
+  display: none;
+  border-radius: 50%;
+  border: 1px solid #3f3f46;
+  margin-bottom: 0.25rem;
+}
+
+section.login .data h3.name {
+  display: none;
+  font-weight: 600;
+}
+
+section.login .data p.email {
+  color: #a1a1aa;
 }
 
 .loader {

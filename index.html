@@ -12,22 +12,47 @@
       <section class="login">
         <h1>Chat App</h1>
         <div class="login-card">
-          <p>Maybe you&apos;re not logged in! Click to login</p>
+          <div class="data">
+            <img
+              class="user-img"
+              height="40px"
+              width="40px"
+              src="/vite.svg"
+              alt="not logged in"
+            />
+            <h3 class="name">Jatin Kumar</h3>
+            <p class="email">Maybe you&apos;re not logged in! Click to login</p>
+          </div>
           <div class="buttons">
-            <button class="login">
+            <button class="login primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                style="fill: rgba(255, 255, 255, 1)"
+                style="fill: white"
               >
                 <path
                   d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"
                 ></path></svg
               >Google
             </button>
-            <button class="sign-out">Sign Out</button>
+            <button class="sign-out secondary">
+              Log Out
+              <svg
+                class="translate"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                style="fill: white"
+              >
+                <path
+                  d="M19.002 3h-14c-1.103 0-2 .897-2 2v4h2V5h14v14h-14v-4h-2v4c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.898-2-2-2z"
+                ></path>
+                <path d="m11 16 5-4-5-4v3.001H3v2h8z"></path>
+              </svg>
+            </button>
           </div>
         </div>
       </section>
