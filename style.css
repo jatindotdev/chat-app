@@ -124,6 +124,10 @@ select {
   }
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   font-weight: normal;
@@ -140,6 +144,8 @@ button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  height: max-content;
+  width: max-content;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   border: none;
@@ -174,16 +180,16 @@ section.login {
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  gap: 2rem;
+}
+
+section.login h1.header {
+  position: absolute;
+  top: 3rem;
 }
 
 .buttons {
   display: flex;
   gap: 1.2rem;
-}
-
-section.login * {
-  transition: 0.4s;
 }
 
 section.login button.login svg {
@@ -218,6 +224,8 @@ section.login .login-card {
   border: 1px solid #3f3f46;
   border-radius: 8px;
   background-color: #27272a;
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgba(0, 0, 0, 0.3),
+    0 1px 2px -1px rgba(0, 0, 0, 0.3);
 }
 
 section.login .data {
@@ -259,4 +267,13 @@ section.login .data p.email {
 .loader svg {
   height: 80px;
   width: auto;
+}
+
+@media screen and (max-width: 640px) {
+  section.login .login-card {
+    width: 100%;
+    padding: 2rem 1rem;
+    border-radius: 0;
+    border-inline: none;
+  }
 }

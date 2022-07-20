@@ -57,7 +57,11 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     setData(user);
   } else {
-    userEmail.textContent = "Maybe you're not logged in! Click to login";
+    userImg.src = null;
+    userImg.style.display = 'none';
+    userName.textContent = null;
+    userName.style.display = 'none';
+    userEmail.textContent = "Maybe you're not logged in!";
     loginButton.innerHTML = defaultLoginButton;
     loginButton.removeEventListener('click', continueToChat);
     loginButton.addEventListener('click', signIn);
