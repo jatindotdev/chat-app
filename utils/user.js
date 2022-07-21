@@ -4,6 +4,10 @@ const createUser = ({
   status,
   recentMessage,
   sentByUser,
+  chatUserName,
+  chatUserImg,
+  chatUserStatus,
+  setterFunction,
 }) => {
   // user div
   const user = document.createElement('div');
@@ -88,8 +92,31 @@ const createUser = ({
           user.classList.contains('active') && user.classList.remove('active')
       );
     e.currentTarget.classList.add('active');
-  });
+    chatUserImg.src = e.currentTarget.querySelector('.user-img img').src;
+    chatUserName.textContent =
+      e.currentTarget.querySelector('p.user-name').textContent;
+    chatUserStatus.classList =
+      e.currentTarget.querySelector('span.user-status').classList;
+    chatUserStatus.textContent =
+      e.currentTarget.querySelector('span.user-status').textContent;
 
+    // always call these function
+    document
+      .querySelector(
+        '#app > section > div > div.chat-window > div.chat-wrapper > div > div'
+      )
+      .scrollIntoView();
+    document
+      .querySelector(
+        '#app > section > div > div.chat-window > div.chat-utils > input[type=text]'
+      )
+      .removeAttribute('disabled');
+    document
+      .querySelector(
+        '#app > section > div > div.chat-window > div.chat-utils > input[type=text]'
+      )
+      .focus();
+  });
   return user;
 };
 

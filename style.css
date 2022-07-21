@@ -321,6 +321,7 @@ section.chat .chat-app .sidebar .menu {
   background-color: #242428;
   border-top-left-radius: 8px;
   border-bottom: 1px solid #3f3f46;
+  user-select: none;
 }
 
 section.chat .chat-app .sidebar .menu img.user-img {
@@ -336,10 +337,16 @@ section.chat .chat-app .sidebar .menu button.logout-button {
   fill: #ffffff8a;
   padding: 0.5rem;
   margin-right: 0.5rem;
+  font-size: 0.875rem;
 }
 
 section.chat .chat-app .sidebar .menu button.logout-button:hover {
   background-color: #ffffff0d;
+}
+
+section.chat .chat-app .sidebar .menu button.logout-button svg {
+  height: 22px;
+  width: auto;
 }
 
 section.chat .chat-app .sidebar .search {
@@ -356,6 +363,7 @@ section.chat .chat-app .sidebar .search .input-field {
   gap: 1rem;
   align-items: center;
   justify-content: center;
+  user-select: none;
   transition: 0.4s;
 }
 
@@ -473,7 +481,212 @@ section.chat .chat-app .sidebar .chat .user .user-info .bottom-row svg {
 }
 
 section.chat .chat-app .chat-window {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
   width: 68%;
+}
+
+section.chat .chat-app .chat-window .chat-header {
+  display: flex;
+  padding: 0.5rem 0.75rem;
+  background-color: #242428;
+  border-bottom: 1px solid #3f3f46;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1000;
+}
+
+section.chat .chat-app .chat-window .chat-header button.menu-button {
+  background-color: transparent;
+  color: #ffffff8a;
+  fill: #ffffff8a;
+  padding: 0.5rem;
+}
+
+section.chat .chat-app .chat-window .chat-header button.menu-button:hover {
+  background-color: #ffffff0d;
+}
+
+section.chat .chat-app .chat-window .chat-header .chat-info {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+}
+
+section.chat .chat-app .chat-window .chat-header .chat-info .user-img {
+  border-radius: 50%;
+  border: 1px solid #3f3f46;
+}
+
+section.chat .chat-app .chat-window .chat-header .chat-info .user-data {
+  display: flex;
+  flex-direction: column;
+}
+
+section.chat
+  .chat-app
+  .chat-window
+  .chat-header
+  .chat-info
+  .user-data
+  .user-status {
+  color: #ffffff83;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+section.chat
+  .chat-app
+  .chat-window
+  .chat-header
+  .chat-info
+  .user-data
+  .user-status.online {
+  color: lightgreen;
+}
+
+section.chat .chat-app .chat-window .chat-wrapper {
+  position: relative;
+  flex: 1 1 0;
+  order: 2;
+  z-index: 1;
+}
+
+section.chat .chat-app .chat-window .chat-list {
+  /* variables */
+  --sentColor: #0b93f6;
+  --receiveColor: #e3e3e3;
+  --bg: #202023;
+
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  padding: 1rem;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition: background 0.3s ease-out 0.1s;
+}
+
+section.chat .chat-app .chat-window .chat-list .shared {
+  position: relative; /* Setup a relative container for our psuedo elements */
+  max-width: 255px;
+  margin-bottom: 15px;
+  padding: 10px 20px;
+  line-height: 24px;
+  word-wrap: break-word; /* Make sure the text wraps to multiple lines if long */
+  border-radius: 25px;
+}
+
+section.chat .chat-app .chat-window .chat-list .shared::before,
+section.chat .chat-app .chat-window .chat-list .shared::after {
+  position: absolute;
+  bottom: 0;
+  height: 25px; /* height of our bubble "tail" - should match the border-radius above */
+  content: '';
+}
+
+section.chat .chat-app .chat-window .chat-list .shared::before {
+  width: 20px;
+}
+
+section.chat .chat-app .chat-window .chat-list .shared::after {
+  width: 26px;
+  background-color: var(--bg); /* All tails have the same bg cutout */
+}
+
+section.chat .chat-app .chat-window .chat-list .sent {
+  align-self: flex-end;
+  color: white;
+  background: var(--sentColor);
+}
+
+section.chat .chat-app .chat-window .chat-list .sent::before {
+  right: -7px;
+  background-color: var(--sentColor);
+  border-bottom-left-radius: 16px 14px;
+}
+
+section.chat .chat-app .chat-window .chat-list .sent::after {
+  right: -26px;
+  border-bottom-left-radius: 10px;
+}
+
+section.chat .chat-app .chat-window .chat-list .received {
+  align-self: flex-start;
+  color: black;
+  background: var(--receiveColor);
+}
+
+section.chat .chat-app .chat-window .chat-list .received::before {
+  left: -7px;
+  background-color: var(--receiveColor);
+  border-bottom-right-radius: 16px 14px;
+}
+
+section.chat .chat-app .chat-window .chat-list .received::after {
+  left: -26px;
+  border-bottom-right-radius: 10px;
+}
+
+section.chat .chat-app .chat-window .chat-list .noTail {
+  margin-bottom: 5px;
+}
+
+section.chat .chat-app .chat-window .chat-list .noTail::before,
+section.chat .chat-app .chat-window .chat-list .noTail::after {
+  opacity: 0;
+}
+
+section.chat .chat-app .chat-window .chat-utils {
+  /* position: absolute; */
+  /* bottom: 0; */
+  order: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #3f3f46;
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 100%;
+}
+
+section.chat .chat-app .chat-window .chat-utils input {
+  background-color: #242428;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  color: #ffffffcc;
+  outline: none;
+}
+
+section.chat .chat-app .chat-window .chat-utils button.send-button {
+  background-color: transparent;
+  color: #ffffff8a;
+  fill: #ffffff8a;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  transition: 0.4s;
+}
+
+section.chat .chat-app .chat-window .chat-utils button.send-button:hover {
+  background-color: #313135;
 }
 
 /* Section animation class */

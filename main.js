@@ -15,6 +15,8 @@ const app = initializeApp({
   appId: '1:407034560466:web:64f4efb3af287b4f8cd20b',
 });
 
+const timeOut = {};
+
 const root = document.querySelector('#app');
 const userImg = document.querySelector('section.login .data img.user-img');
 const userName = document.querySelector('section.login .data h3.name');
@@ -34,6 +36,21 @@ const chatDisplayPicture = document.querySelector(
 const chatSignOutButton = document.querySelector(
   'section.chat .chat-app .sidebar .menu button.logout-button'
 );
+const chatUserImg = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-header .chat-info .user-img'
+);
+const chatUserName = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-header .chat-info .user-data .user-name'
+);
+const chatUserStatus = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-header .chat-info .user-data .user-status'
+);
+const chatInputField = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-utils input'
+);
+const chatSendButton = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-utils button'
+);
 const loader = document.querySelector('.loader');
 
 chats.append(
@@ -44,6 +61,9 @@ chats.append(
     sentByUser: false,
     status: 'offline',
     recentMessage: 'aata hun 5min m',
+    chatUserName,
+    chatUserImg,
+    chatUserStatus,
   }),
   createUser({
     displayName: 'Flames',
@@ -52,11 +72,29 @@ chats.append(
     sentByUser: true,
     status: 'online',
     recentMessage: 'dc aaja bro agar free hai',
+    chatUserName,
+    chatUserImg,
+    chatUserStatus,
   })
 );
 
 // remove chat section to add later
 chatSection.remove();
+
+const enterKeyEvent = (e) => {
+  e.key === 'Enter' && continueToChat();
+};
+
+const chatEvents = (e) => {
+  e.key === '/' && chatInputField.focus();
+  e.key === 'Enter' && console.log(chatSendButton);
+};
+
+const mouseMoveEvent = () => {
+  clearTimeout(timeOut.timer);
+  window.addEventListener('keyup', enterKeyEvent);
+  bottomMsg.textContent = 'Press enter to continue';
+};
 
 const signIn = () => {
   const provider = new GoogleAuthProvider();
@@ -65,6 +103,8 @@ const signIn = () => {
 
 const signOut = () => {
   auth.signOut();
+  window.removeEventListener('mousemove', mouseMoveEvent);
+  window.removeEventListener('keyup', enterKeyEvent);
   loginSection.classList.remove('animate');
   root.append(loginSection);
   setTimeout(() => {
@@ -74,6 +114,8 @@ const signOut = () => {
 };
 
 const continueToChat = () => {
+  window.removeEventListener('mousemove', mouseMoveEvent);
+  window.removeEventListener('keyup', enterKeyEvent);
   root.appendChild(chatSection);
   setTimeout(() => {
     loginSection.remove();
@@ -89,16 +131,15 @@ const setData = (user) => {
   userEmail.textContent = user.email;
   loginButton.innerHTML =
     'Continue <svg class="translate" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: white"><path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path></svg>';
-  bottomMsg.textContent = 'Press enter to continue';
+  bottomMsg.textContent = 'Proceeding in a sec';
   loginSection.classList.add('animate');
   loginButton.removeEventListener('click', signIn);
   loginButton.addEventListener('click', continueToChat);
   signOutButton.style.display = 'inherit';
   signOutButton.addEventListener('click', signOut);
-  window.addEventListener(
-    'keyup',
-    (e) => e.key === 'Enter' && continueToChat()
-  );
+  timeOut.timer = setTimeout(continueToChat, 1000);
+  window.addEventListener('mousemove', mouseMoveEvent);
+  window.addEventListener('keyup', chatEvents);
   chatDisplayPicture.src = user.photoURL;
   chatSignOutButton.addEventListener('click', signOut);
 };
@@ -108,6 +149,7 @@ const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   if (user) {
     setData(user);
+    loader.remove();
   } else {
     userImg.src = null;
     userImg.style.display = 'none';
@@ -119,8 +161,10 @@ onAuthStateChanged(auth, (user) => {
     loginButton.addEventListener('click', signIn);
     signOutButton.style.display = 'none';
     bottomMsg.textContent = '';
-    loginSection.classList.add('animate');
+    setTimeout(() => {
+      loader.remove();
+      loginSection.classList.add('animate');
+    }, 500);
   }
   document.activeElement.blur();
-  loader.remove();
 });
