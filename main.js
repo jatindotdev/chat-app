@@ -24,6 +24,10 @@ const app = initializeApp({
   appId: '1:407034560466:web:64f4efb3af287b4f8cd20b',
 });
 
+// TODO No tail feature
+// TODO mplement one to one chatting
+// FIXME OVERFLOW fix for chat sidebar
+
 const timeOut = {};
 
 const root = document.querySelector('#app');
