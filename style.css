@@ -569,7 +569,7 @@ section.chat .chat-app .chat-window .chat-list {
   z-index: 100;
   padding-inline: 0.5rem 0.25rem;
   padding-top: 1rem;
-  padding-bottom: 0;
+  padding-bottom: 0.25rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

@@ -65,8 +65,6 @@ const chatList = document.querySelector(
 );
 const loader = document.querySelector('.loader');
 
-let unsubscribeSnapshot;
-
 // chats.append(
 //   createUser({
 //     displayName: 'AyaAya',
@@ -100,7 +98,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const collectionRef = collection(db, 'messages');
 
-onAuthStateChanged(auth, (user) => {
+const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
   if (user) {
     setData(user);
     loader.remove();
@@ -141,19 +139,6 @@ const mouseMoveEvent = () => {
 const signIn = () => {
   const provider = new GoogleAuthProvider();
   signInWithPopup(auth, provider).then((result) => setData(result.user));
-};
-
-const signOut = () => {
-  unsubscribeSnapshot();
-  auth.signOut();
-  window.removeEventListener('mousemove', mouseMoveEvent);
-  window.removeEventListener('keyup', enterKeyEvent);
-  loginSection.classList.remove('animate');
-  root.append(loginSection);
-  setTimeout(() => {
-    chatSection.remove();
-    loginSection.classList.add('animate');
-  }, 0);
 };
 
 const loadMessages = (messages) => {
@@ -211,13 +196,22 @@ const continueToChat = () => {
     loginSection.remove();
     chatSection.classList.add('animate');
   }, 0);
-  unsubscribeSnapshot = onSnapshot(
-    query(collectionRef, orderBy('createdAt')),
-    (data) => {
-      loadMessages(data.docs.map((message) => message.data()));
-    }
-  );
+  onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
+    loadMessages(data.docs.map((message) => message.data()));
+  });
   chatInputField.focus();
+};
+
+const signOut = () => {
+  auth.signOut();
+  window.removeEventListener('mousemove', mouseMoveEvent);
+  window.removeEventListener('keyup', enterKeyEvent);
+  loginSection.classList.remove('animate');
+  root.append(loginSection);
+  setTimeout(() => {
+    chatSection.remove();
+    loginSection.classList.add('animate');
+  }, 0);
 };
 
 const setData = (user) => {
@@ -240,3 +234,7 @@ const setData = (user) => {
   chatDisplayPicture.src = user.photoURL;
   chatSignOutButton.addEventListener('click', signOut);
 };
+
+window.addEventListener('beforeunload', () => {
+  unsubscribeAuthState();
+});
