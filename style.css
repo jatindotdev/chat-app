@@ -567,7 +567,8 @@ section.chat .chat-app .chat-window .chat-list {
   position: absolute;
   top: 0;
   z-index: 100;
-  padding: 1rem;
+  padding-inline: 0.5rem 0.25rem;
+  padding-top: 1rem;
   padding-bottom: 0;
   box-sizing: border-box;
   display: flex;
@@ -577,6 +578,13 @@ section.chat .chat-app .chat-window .chat-list {
   overflow-x: hidden;
   overflow-y: scroll;
   transition: background 0.3s ease-out 0.1s;
+  scroll-behavior: smooth;
+}
+
+section.chat .chat-app .chat-window .chat-list div img {
+  z-index: 99;
+  margin-bottom: auto;
+  border-radius: 50%;
 }
 
 section.chat .chat-app .chat-window .chat-list .shared {
@@ -606,36 +614,47 @@ section.chat .chat-app .chat-window .chat-list .shared::after {
   background-color: var(--bg); /* All tails have the same bg cutout */
 }
 
-section.chat .chat-app .chat-window .chat-list .sent {
+section.chat .chat-app .chat-window .chat-list div.sent {
+  display: flex;
+  gap: 0.5rem;
   align-self: flex-end;
+}
+
+section.chat .chat-app .chat-window .chat-list span.sent {
   color: white;
+  width: max-content;
   background: var(--sentColor);
 }
 
-section.chat .chat-app .chat-window .chat-list .sent::before {
+section.chat .chat-app .chat-window .chat-list span.sent::before {
   right: -7px;
   background-color: var(--sentColor);
   border-bottom-left-radius: 16px 14px;
 }
 
-section.chat .chat-app .chat-window .chat-list .sent::after {
+section.chat .chat-app .chat-window .chat-list span.sent::after {
   right: -26px;
   border-bottom-left-radius: 10px;
 }
 
-section.chat .chat-app .chat-window .chat-list .received {
+section.chat .chat-app .chat-window .chat-list div.received {
+  display: flex;
+  gap: 0.5rem;
   align-self: flex-start;
+}
+
+section.chat .chat-app .chat-window .chat-list span.received {
   color: black;
   background: var(--receiveColor);
 }
 
-section.chat .chat-app .chat-window .chat-list .received::before {
+section.chat .chat-app .chat-window .chat-list span.received::before {
   left: -7px;
   background-color: var(--receiveColor);
   border-bottom-right-radius: 16px 14px;
 }
 
-section.chat .chat-app .chat-window .chat-list .received::after {
+section.chat .chat-app .chat-window .chat-list span.received::after {
   left: -26px;
   border-bottom-right-radius: 10px;
 }

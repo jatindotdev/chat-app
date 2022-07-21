@@ -7,7 +7,6 @@ const createUser = ({
   chatUserName,
   chatUserImg,
   chatUserStatus,
-  setterFunction,
 }) => {
   // user div
   const user = document.createElement('div');
@@ -101,11 +100,6 @@ const createUser = ({
       e.currentTarget.querySelector('span.user-status').textContent;
 
     // always call these function
-    document
-      .querySelector(
-        '#app > section > div > div.chat-window > div.chat-wrapper > div > div'
-      )
-      .scrollIntoView();
     document
       .querySelector(
         '#app > section > div > div.chat-window > div.chat-utils > input[type=text]'
