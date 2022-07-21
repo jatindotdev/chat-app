@@ -47,6 +47,11 @@
     U+FEFF, U+FFFD;
 }
 
+:root {
+  --base-shadow: 0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgba(0, 0, 0, 0.3),
+    0 1px 2px -1px rgba(0, 0, 0, 0.3);
+}
+
 /* https://piccalil.li/blog/a-modern-css-reset */
 
 /* Box sizing rules */
@@ -125,7 +130,12 @@ select {
 }
 
 ::-webkit-scrollbar {
-  display: none;
+  width: 4px !important;
+  height: 4px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3f3f46;
 }
 
 body {
@@ -161,6 +171,11 @@ button.primary {
   color: #ffffff;
 }
 
+button.primary:focus {
+  outline: 2px solid #db1d70;
+  outline-offset: 2px;
+}
+
 button.primary:hover {
   background-color: rgb(192, 26, 98);
 }
@@ -169,6 +184,12 @@ button.secondary {
   background-color: #27272a;
   color: #ffffff;
   border: 1px solid #3f3f46;
+}
+
+button.secondary:focus {
+  background-color: rgba(255, 255, 255, 0.05);
+  outline: 2px solid #3f3f46;
+  outline-offset: 2px;
 }
 
 button.secondary:hover {
@@ -188,7 +209,6 @@ section.login {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 99;
   transition: 0.4s;
 }
 
@@ -234,8 +254,7 @@ section.login .login-card {
   border: 1px solid #3f3f46;
   border-radius: 8px;
   background-color: #27272a;
-  box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgba(0, 0, 0, 0.3),
-    0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--base-shadow);
 }
 
 section.login .login-card span.bottom-msg {
@@ -278,6 +297,185 @@ section.chat {
   transition: 0.4s;
 }
 
+section.chat .chat-app {
+  height: 85vh;
+  width: 80vw;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  background-color: #202023;
+  box-shadow: var(--base-shadow);
+  display: flex;
+  overflow: hidden;
+}
+
+section.chat .chat-app .sidebar {
+  height: 100%;
+  width: 32%;
+  border-right: 1px solid #3f3f46;
+}
+
+section.chat .chat-app .sidebar .menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #242428;
+  border-top-left-radius: 8px;
+  border-bottom: 1px solid #3f3f46;
+}
+
+section.chat .chat-app .sidebar .menu img.user-img {
+  margin: 0.5rem;
+  border-radius: 50%;
+  border: 1px solid #3f3f46;
+  cursor: pointer;
+}
+
+section.chat .chat-app .sidebar .menu button.logout-button {
+  background-color: transparent;
+  color: #ffffff8a;
+  fill: #ffffff8a;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+section.chat .chat-app .sidebar .menu button.logout-button:hover {
+  background-color: #ffffff0d;
+}
+
+section.chat .chat-app .sidebar .search {
+  padding: 0.5rem;
+  border-bottom: 1px solid #3f3f46;
+}
+
+section.chat .chat-app .sidebar .search .input-field {
+  display: flex;
+  border: 1px solid #3f3f46;
+  padding-inline: 1rem;
+  border-radius: 8px;
+  background-color: #242428;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s;
+}
+
+section.chat .chat-app .sidebar .search .input-field svg {
+  margin: auto;
+  fill: #757575;
+  transition: 0.2s;
+}
+
+section.chat .chat-app .sidebar .search .input-field input {
+  background-color: transparent;
+  width: 100%;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border: none;
+  border-left-color: transparent;
+  color: #ffffffcc;
+  outline: none;
+}
+
+section.chat .chat-app .sidebar .search .input-field:focus-within svg {
+  fill: #ffffffcc;
+}
+
+section.chat .chat-app .sidebar .chat {
+  height: 82%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+section.chat .chat-app .sidebar .chat .user {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+section.chat .chat-app .sidebar .chat .user.active {
+  background-color: #313135;
+}
+
+section.chat .chat-app .sidebar .chat .user.active:hover {
+  background-color: #313135;
+}
+
+section.chat .chat-app .sidebar .chat .user:hover {
+  background-color: #27272a;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-img {
+  flex-shrink: 0;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-img img {
+  border-radius: 50%;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-info {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #313135;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-info .top-row {
+  display: flex;
+  color: #ffffff;
+  justify-content: space-between;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-info .top-row .user-status {
+  font-size: 0.75rem;
+  padding-right: 0.25rem;
+  color: #ffffff83;
+}
+
+section.chat
+  .chat-app
+  .sidebar
+  .chat
+  .user
+  .user-info
+  .top-row
+  .user-status.online {
+  color: lightgreen;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-info .bottom-row {
+  display: flex;
+  align-items: center;
+}
+
+section.chat
+  .chat-app
+  .sidebar
+  .chat
+  .user
+  .user-info
+  .bottom-row
+  .recent-message {
+  width: 200px;
+  font-size: 0.875rem;
+  color: #ffffff83;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+section.chat .chat-app .sidebar .chat .user .user-info .bottom-row svg {
+  fill: #ffffff83;
+  padding-right: 0.12rem;
+}
+
+section.chat .chat-app .chat-window {
+  width: 68%;
+}
+
 /* Section animation class */
 section.animate {
   opacity: 1;
@@ -302,6 +500,10 @@ section.animate {
 .loader svg {
   height: 80px;
   width: auto;
+}
+
+.hidden {
+  display: none;
 }
 
 @media screen and (max-width: 640px) {
