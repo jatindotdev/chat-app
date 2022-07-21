@@ -186,7 +186,7 @@ const loadMessages = (messages) => {
   chatList.replaceChildren(...messageNodes);
   document
     .querySelector(
-      '#app > section > div > div.chat-window > div.chat-wrapper > div > div'
+      '#app > section > div > div.chat-window > div.chat-wrapper > div > div.scrollTo'
     )
     .scrollIntoView();
 };
