@@ -1,4 +1,4 @@
-const createUser = ({
+export const createUser = ({
   displayName,
   photoURL,
   status,
