@@ -26,7 +26,6 @@ const app = initializeApp({
 
 // TODO No tail feature
 // TODO mplement one to one chatting
-// FIXME OVERFLOW fix for chat sidebar
 
 const timeOut = {};
 
@@ -42,7 +41,7 @@ const signOutButton = document.querySelector('section.login button.sign-out');
 const bottomMsg = document.querySelector(
   'section.login .login-card span.bottom-msg'
 );
-const chats = document.querySelector('section.chat .chat-app .chat');
+const chats = document.querySelector('section.chat .chat-app .user-chats');
 const chatDisplayPicture = document.querySelector(
   'section.chat .chat-app .sidebar .menu img.user-img'
 );
@@ -69,30 +68,30 @@ const chatList = document.querySelector(
 );
 const loader = document.querySelector('.loader');
 
-// chats.append(
-//   createUser({
-//     displayName: 'AyaAya',
-//     photoURL:
-//       'https://pps.whatsapp.net/v/t61.24694-24/247123619_1187030705380254_1246475757011143598_n.jpg?ccb=11-4&oh=01_AVxdhEDvfBidLPccArCE_I8vMdVQo5_jjp0OLl0VNAVAEA&oe=62E9EA12',
-//     sentByUser: false,
-//     status: 'offline',
-//     recentMessage: 'aata hun 5min m',
-//     chatUserName,
-//     chatUserImg,
-//     chatUserStatus,
-//   }),
-//   createUser({
-//     displayName: 'Flames',
-//     photoURL:
-//       'https://pps.whatsapp.net/v/t61.24694-24/224872162_319097646835545_2046865797955044402_n.jpg?ccb=11-4&oh=01_AVzyfnJxXES1X2C_F4x9dU6HBDcCdl2lJmKXq3aZmtJkmQ&oe=62E90710',
-//     sentByUser: true,
-//     status: 'online',
-//     recentMessage: 'dc aaja bro agar free hai',
-//     chatUserName,
-//     chatUserImg,
-//     chatUserStatus,
-//   })
-// );
+chats.append(
+  createUser({
+    displayName: 'AyaAya',
+    photoURL:
+      'https://pps.whatsapp.net/v/t61.24694-24/247123619_1187030705380254_1246475757011143598_n.jpg?ccb=11-4&oh=01_AVxdhEDvfBidLPccArCE_I8vMdVQo5_jjp0OLl0VNAVAEA&oe=62E9EA12',
+    sentByUser: false,
+    status: 'offline',
+    recentMessage: 'aata hun 5min m',
+    chatUserName,
+    chatUserImg,
+    chatUserStatus,
+  }),
+  createUser({
+    displayName: 'Flames',
+    photoURL:
+      'https://pps.whatsapp.net/v/t61.24694-24/224872162_319097646835545_2046865797955044402_n.jpg?ccb=11-4&oh=01_AVzyfnJxXES1X2C_F4x9dU6HBDcCdl2lJmKXq3aZmtJkmQ&oe=62E90710',
+    sentByUser: true,
+    status: 'online',
+    recentMessage: 'dc aaja bro agar free hai',
+    chatUserName,
+    chatUserImg,
+    chatUserStatus,
+  })
+);
 
 // remove chat section to add later
 chatSection.remove();

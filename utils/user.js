@@ -85,7 +85,7 @@ const createUser = ({
 
   user.addEventListener('click', (e) => {
     document
-      .querySelectorAll('section.chat .chat-app .sidebar .chat .user')
+      .querySelectorAll('section.chat .chat-app .sidebar .user-chats .user')
       .forEach(
         (user) =>
           user.classList.contains('active') && user.classList.remove('active')

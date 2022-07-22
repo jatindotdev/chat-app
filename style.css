@@ -309,6 +309,9 @@ section.chat .chat-app {
 }
 
 section.chat .chat-app .sidebar {
+  display: flex;
+  flex-direction: column;
+  position: relative;
   height: 100%;
   width: 32%;
   border-right: 1px solid #3f3f46;
@@ -350,8 +353,16 @@ section.chat .chat-app .sidebar .menu button.logout-button svg {
 }
 
 section.chat .chat-app .sidebar .search {
-  padding: 0.5rem;
+  order: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #3f3f46;
+  position: relative;
+  z-index: 1;
+  flex: none;
 }
 
 section.chat .chat-app .sidebar .search .input-field {
@@ -359,6 +370,7 @@ section.chat .chat-app .sidebar .search .input-field {
   border: 1px solid #3f3f46;
   padding-inline: 1rem;
   border-radius: 8px;
+  width: 100%;
   background-color: #242428;
   gap: 1rem;
   align-items: center;
@@ -387,13 +399,28 @@ section.chat .chat-app .sidebar .search .input-field:focus-within svg {
   fill: #ffffffcc;
 }
 
-section.chat .chat-app .sidebar .chat {
-  height: 82%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+section.chat .chat-app .sidebar .chat-wrapper {
+  position: relative;
+  flex: 1 1 0;
+  order: 3;
+  z-index: 1;
 }
 
-section.chat .chat-app .sidebar .chat .user {
+section.chat .chat-app .sidebar .user-chats {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition: background 0.3s ease-out 0.1s;
+  scroll-behavior: smooth;
+  z-index: 100;
+}
+
+section.chat .chat-app .sidebar .user-chats .user {
   display: flex;
   align-items: center;
   padding: 0 0.75rem;
@@ -402,27 +429,27 @@ section.chat .chat-app .sidebar .chat .user {
   user-select: none;
 }
 
-section.chat .chat-app .sidebar .chat .user.active {
+section.chat .chat-app .sidebar .user-chats .user.active {
   background-color: #313135;
 }
 
-section.chat .chat-app .sidebar .chat .user.active:hover {
+section.chat .chat-app .sidebar .user-chats .user.active:hover {
   background-color: #313135;
 }
 
-section.chat .chat-app .sidebar .chat .user:hover {
+section.chat .chat-app .sidebar .user-chats .user:hover {
   background-color: #27272a;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-img {
+section.chat .chat-app .sidebar .user-chats .user .user-img {
   flex-shrink: 0;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-img img {
+section.chat .chat-app .sidebar .user-chats .user .user-img img {
   border-radius: 50%;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-info {
+section.chat .chat-app .sidebar .user-chats .user .user-info {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -431,13 +458,20 @@ section.chat .chat-app .sidebar .chat .user .user-info {
   border-bottom: 1px solid #313135;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-info .top-row {
+section.chat .chat-app .sidebar .user-chats .user .user-info .top-row {
   display: flex;
   color: #ffffff;
   justify-content: space-between;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-info .top-row .user-status {
+section.chat
+  .chat-app
+  .sidebar
+  .user-chats
+  .user
+  .user-info
+  .top-row
+  .user-status {
   font-size: 0.75rem;
   padding-right: 0.25rem;
   color: #ffffff83;
@@ -446,7 +480,7 @@ section.chat .chat-app .sidebar .chat .user .user-info .top-row .user-status {
 section.chat
   .chat-app
   .sidebar
-  .chat
+  .user-chats
   .user
   .user-info
   .top-row
@@ -454,7 +488,7 @@ section.chat
   color: lightgreen;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-info .bottom-row {
+section.chat .chat-app .sidebar .user-chats .user .user-info .bottom-row {
   display: flex;
   align-items: center;
 }
@@ -462,7 +496,7 @@ section.chat .chat-app .sidebar .chat .user .user-info .bottom-row {
 section.chat
   .chat-app
   .sidebar
-  .chat
+  .user-chats
   .user
   .user-info
   .bottom-row
@@ -475,11 +509,12 @@ section.chat
   overflow: hidden;
 }
 
-section.chat .chat-app .sidebar .chat .user .user-info .bottom-row svg {
+section.chat .chat-app .sidebar .user-chats .user .user-info .bottom-row svg {
   fill: #ffffff83;
   padding-right: 0.12rem;
 }
 
+/* Chat window */
 section.chat .chat-app .chat-window {
   display: flex;
   flex-direction: column;
