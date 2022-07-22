@@ -18,14 +18,13 @@ import { createUser } from './utils/createUser';
 
 const app = initializeApp({
   apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: 'realtime-chat-app-41285.firebaseapp.com',
-  projectId: 'realtime-chat-app-41285',
-  storageBucket: 'realtime-chat-app-41285.appspot.com',
-  messagingSenderId: '407034560466',
-  appId: '1:407034560466:web:64f4efb3af287b4f8cd20b',
+  authDomain: 'chat-withme-firebase.firebaseapp.com',
+  projectId: 'chat-withme-firebase',
+  storageBucket: 'chat-withme-firebase.appspot.com',
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 });
 
-// TODO No tail feature
 // TODO mplement one to one chatting
 
 const timeOut = {};
@@ -69,30 +68,18 @@ const chatList = document.querySelector(
 );
 const loader = document.querySelector('.loader');
 
-chats.append(
+/*
   createUser({
-    displayName: 'AyaAya',
-    photoURL:
-      'https://pps.whatsapp.net/v/t61.24694-24/247123619_1187030705380254_1246475757011143598_n.jpg?ccb=11-4&oh=01_AVxdhEDvfBidLPccArCE_I8vMdVQo5_jjp0OLl0VNAVAEA&oe=62E9EA12',
-    sentByUser: false,
-    status: 'offline',
-    recentMessage: 'aata hun 5min m',
-    chatUserName,
-    chatUserImg,
-    chatUserStatus,
-  }),
-  createUser({
-    displayName: 'Flames',
-    photoURL:
-      'https://pps.whatsapp.net/v/t61.24694-24/224872162_319097646835545_2046865797955044402_n.jpg?ccb=11-4&oh=01_AVzyfnJxXES1X2C_F4x9dU6HBDcCdl2lJmKXq3aZmtJkmQ&oe=62E90710',
-    sentByUser: true,
-    status: 'online',
-    recentMessage: 'dc aaja bro agar free hai',
+    displayName,
+    photoURL,
+    sentByUser,
+    status,
+    recentMessage,
     chatUserName,
     chatUserImg,
     chatUserStatus,
   })
-);
+*/
 
 // remove chat section to add later
 chatSection.remove();
