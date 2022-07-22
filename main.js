@@ -94,9 +94,9 @@ const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
     setData(user);
     loader.remove();
   } else {
-    userImg.src = null;
+    userImg.src = '';
     userImg.style.display = 'none';
-    userName.textContent = null;
+    userName.textContent = '';
     userName.style.display = 'none';
     userEmail.textContent = "Maybe you're not logged in!";
     loginButton.innerHTML = defaultLoginButton;
