@@ -151,6 +151,13 @@ const loadMessages = (messages) => {
     const messageClass =
       message.uid === auth.currentUser.uid ? 'sent' : 'received';
     container.classList.add(messageClass);
+    let noTail;
+    const isLast = i === messages.length - 1;
+    if (messageClass === 'sent') {
+      noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
+    } else if (messageClass === 'received') {
+      noTail = !isLast && messages[i + 1]?.uid !== auth.currentUser.uid;
+    }
     // image
     const imageElement = new Image();
     imageElement.setAttribute(`height`, `45px`);
@@ -162,9 +169,14 @@ const loadMessages = (messages) => {
     const span = document.createElement('span');
     span.classList.add('shared');
     span.classList.add(messageClass);
+    if (noTail) span.classList.add('noTail');
     span.textContent = message.text;
     messageClass === 'sent'
-      ? container.append(span, imageElement)
+      ? noTail
+        ? container.appendChild(span)
+        : container.append(span, imageElement)
+      : noTail
+      ? container.appendChild(span)
       : container.append(imageElement, span);
     messageNodes.push(container);
   });

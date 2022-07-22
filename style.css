@@ -694,8 +694,16 @@ section.chat .chat-app .chat-window .chat-list span.received::after {
   border-bottom-right-radius: 10px;
 }
 
+section.chat .chat-app .chat-window .chat-list span.received.noTail {
+  margin-left: 53px;
+}
+
+section.chat .chat-app .chat-window .chat-list span.sent.noTail {
+  margin-right: 53px;
+}
+
 section.chat .chat-app .chat-window .chat-list .noTail {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 section.chat .chat-app .chat-window .chat-list .noTail::before,
