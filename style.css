@@ -339,6 +339,7 @@ section.chat .chat-app .sidebar .menu button.logout-button {
   color: #ffffff8a;
   fill: #ffffff8a;
   padding: 0.5rem;
+  flex-shrink: 0;
   margin-right: 0.5rem;
   font-size: 0.875rem;
 }
@@ -800,11 +801,28 @@ section.animate {
   display: none;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 500px) {
   section.login .login-card {
     width: 100%;
     padding: 2rem 1rem 0.5rem;
     border-radius: 0;
     border-inline: none;
+    text-align: center;
+  }
+
+  section.chat .chat-app .sidebar {
+    display: none;
+  }
+
+  section.chat .chat-app .chat-window {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  section.chat .chat-app {
+    height: 100%;
+    width: 100%;
   }
 }
