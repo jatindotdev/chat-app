@@ -148,15 +148,22 @@ const loadMessages = (messages) => {
     // lastMessageUid !== message.uid;
 
     if (messageClass === 'sent') {
-      noTail =
-        !isLast &&
-        messages[i + 1]?.uid === auth.currentUser.uid &&
-        lastMessageUid !== message.uid;
+      noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
     } else if (messageClass === 'received') {
-      noTail =
-        !isLast &&
-        messages[i + 1]?.uid !== auth.currentUser.uid &&
-        lastMessageUid !== message.uid;
+      if (!isLast) {
+        if (
+          lastMessageUid !== message.uid &&
+          messages[i + 1]?.uid !== message.uid
+        )
+          noTail = false;
+        else if (
+          lastMessageUid !== message.uid &&
+          messages[i + 1]?.uid !== lastMessageUid
+        )
+          noTail = true;
+        else if (lastMessageUid !== message.uid) noTail = false;
+        else if (messages[i + 1]?.uid === lastMessageUid) noTail = true;
+      } else noTail = false;
     }
 
     // image
