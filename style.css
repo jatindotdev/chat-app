@@ -595,7 +595,7 @@ section.chat .chat-app .chat-window .chat-wrapper {
 
 section.chat .chat-app .chat-window .chat-list {
   /* variables */
-  --sentColor: #0b93f6;
+  --sentColor: #0b8a00;
   --receiveColor: #e3e3e3;
   --bg: #202023;
 
