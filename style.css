@@ -618,14 +618,12 @@ section.chat .chat-app .chat-window .chat-list {
 
 section.chat .chat-app .chat-window .chat-list div img {
   z-index: 99;
-  margin-bottom: auto;
   border-radius: 50%;
 }
 
 section.chat .chat-app .chat-window .chat-list .shared {
   position: relative; /* Setup a relative container for our psuedo elements */
   max-width: 255px;
-  margin-bottom: 15px;
   padding: 10px 20px;
   line-height: 24px;
   word-wrap: break-word; /* Make sure the text wraps to multiple lines if long */
@@ -652,6 +650,7 @@ section.chat .chat-app .chat-window .chat-list .shared::after {
 section.chat .chat-app .chat-window .chat-list div.sent {
   display: flex;
   gap: 0.5rem;
+  align-items: flex-end;
   align-self: flex-end;
 }
 
@@ -675,6 +674,7 @@ section.chat .chat-app .chat-window .chat-list span.sent::after {
 section.chat .chat-app .chat-window .chat-list div.received {
   display: flex;
   gap: 0.5rem;
+  align-items: flex-end;
   align-self: flex-start;
 }
 

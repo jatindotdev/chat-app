@@ -134,6 +134,7 @@ const signIn = () => {
 
 const loadMessages = (messages) => {
   const messageNodes = [];
+  let lastMessageUid;
   messages.forEach((message, i) => {
     const container = document.createElement('div');
     const messageClass =
@@ -144,7 +145,13 @@ const loadMessages = (messages) => {
     if (messageClass === 'sent') {
       noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
     } else if (messageClass === 'received') {
-      noTail = !isLast && messages[i + 1]?.uid !== auth.currentUser.uid;
+      if (lastMessageUid !== message.uid) {
+        noTail =
+          !isLast &&
+          (messages[i + 1]?.uid !== auth.currentUser.uid) === lastMessageUid;
+      } else {
+        noTail = !isLast && messages[i + 1]?.uid !== auth.currentUser.uid;
+      }
     }
     // image
     const imageElement = new Image();
@@ -167,6 +174,7 @@ const loadMessages = (messages) => {
       ? container.appendChild(span)
       : container.append(imageElement, span);
     messageNodes.push(container);
+    lastMessageUid = message.uid;
   });
   const scrollDiv = document.createElement('div');
   scrollDiv.classList.add('scrollTo');
@@ -183,7 +191,7 @@ chatSendButton.addEventListener('click', () => {
   if (!chatInputField.value.trim()) return;
   const { uid, photoURL } = auth.currentUser;
   addDoc(collectionRef, {
-    text: chatInputField.value,
+    text: chatInputField.value.trim(),
     createdAt: serverTimestamp(),
     uid,
     photoURL,
