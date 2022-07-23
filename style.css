@@ -650,6 +650,7 @@ section.chat .chat-app .chat-window .chat-list .shared::after {
 section.chat .chat-app .chat-window .chat-list div.sent {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 25px;
   align-items: flex-end;
   align-self: flex-end;
 }
@@ -674,6 +675,7 @@ section.chat .chat-app .chat-window .chat-list span.sent::after {
 section.chat .chat-app .chat-window .chat-list div.received {
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 25px;
   align-items: flex-end;
   align-self: flex-start;
 }
@@ -702,7 +704,7 @@ section.chat .chat-app .chat-window .chat-list span.sent.noTail {
   margin-right: 53px;
 }
 
-section.chat .chat-app .chat-window .chat-list .noTail {
+section.chat .chat-app .chat-window .chat-list div.noTail {
   margin-bottom: 6px;
 }
 

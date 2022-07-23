@@ -145,13 +145,13 @@ const loadMessages = (messages) => {
     if (messageClass === 'sent') {
       noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
     } else if (messageClass === 'received') {
-      if (lastMessageUid !== message.uid) {
-        noTail =
-          !isLast &&
-          (messages[i + 1]?.uid !== auth.currentUser.uid) === lastMessageUid;
-      } else {
-        noTail = !isLast && messages[i + 1]?.uid !== auth.currentUser.uid;
-      }
+      if (lastMessageUid !== message.uid) noTail = true;
+      else noTail = false;
+      // if (lastMessageUid !== message.uid) {
+      //   noTail = !isLast && messages[i + 1]?.uid !== lastMessageUid;
+      // } else {
+      // noTail = !isLast && messages[i + 1]?.uid !== auth.currentUser.uid;
+      // }
     }
     // image
     const imageElement = new Image();
@@ -164,7 +164,10 @@ const loadMessages = (messages) => {
     const span = document.createElement('span');
     span.classList.add('shared');
     span.classList.add(messageClass);
-    if (noTail) span.classList.add('noTail');
+    if (noTail) {
+      span.classList.add('noTail');
+      container.classList.add('noTail');
+    }
     span.textContent = message.text;
     messageClass === 'sent'
       ? noTail
