@@ -343,6 +343,11 @@ section.chat .chat-app .sidebar .menu button.logout-button {
   font-size: 0.875rem;
 }
 
+section.chat .chat-app .sidebar .menu button.logout-button:focus {
+  outline: 0;
+  background-color: #ffffff0d;
+}
+
 section.chat .chat-app .sidebar .menu button.logout-button:hover {
   background-color: #ffffff0d;
 }
@@ -541,6 +546,11 @@ section.chat .chat-app .chat-window .chat-header button.menu-button {
   padding: 0.5rem;
 }
 
+section.chat .chat-app .chat-window .chat-header button.menu-button:focus {
+  outline: 0;
+  background-color: #ffffff0d;
+}
+
 section.chat .chat-app .chat-window .chat-header button.menu-button:hover {
   background-color: #ffffff0d;
 }
@@ -619,6 +629,7 @@ section.chat .chat-app .chat-window .chat-list {
 section.chat .chat-app .chat-window .chat-list div img {
   z-index: 99;
   border-radius: 50%;
+  user-select: none;
 }
 
 section.chat .chat-app .chat-window .chat-list .shared {
@@ -728,6 +739,7 @@ section.chat .chat-app .chat-window .chat-utils {
   z-index: 1;
   flex: none;
   width: 100%;
+  user-select: none;
 }
 
 section.chat .chat-app .chat-window .chat-utils input {
@@ -747,6 +759,11 @@ section.chat .chat-app .chat-window .chat-utils button.send-button {
   padding: 0.5rem;
   border: 1px solid transparent;
   transition: 0.4s;
+}
+
+section.chat .chat-app .chat-window .chat-utils button.send-button:focus {
+  outline: 0;
+  background-color: #313135;
 }
 
 section.chat .chat-app .chat-window .chat-utils button.send-button:hover {

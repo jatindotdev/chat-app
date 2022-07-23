@@ -142,16 +142,23 @@ const loadMessages = (messages) => {
     container.classList.add(messageClass);
     let noTail;
     const isLast = i === messages.length - 1;
+    // const noTail =
+    // !isLast &&
+    // messages[i + 1]?.uid !== auth.currentUser.uid &&
+    // lastMessageUid !== message.uid;
+
     if (messageClass === 'sent') {
-      noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
+      noTail =
+        !isLast &&
+        messages[i + 1]?.uid === auth.currentUser.uid &&
+        lastMessageUid !== message.uid;
     } else if (messageClass === 'received') {
-      if (
-        lastMessageUid !== message.uid &&
+      noTail =
+        !isLast &&
         messages[i + 1]?.uid !== auth.currentUser.uid &&
-        !isLast
-      )
-        noTail = true;
+        lastMessageUid !== message.uid;
     }
+
     // image
     const imageElement = new Image();
     imageElement.setAttribute(`height`, `45px`);
