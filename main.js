@@ -145,8 +145,12 @@ const loadMessages = (messages) => {
     if (messageClass === 'sent') {
       noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
     } else if (messageClass === 'received') {
-      if (lastMessageUid !== message.uid) noTail = true && !isLast;
-      else noTail = false && !isLast;
+      if (
+        lastMessageUid !== message.uid &&
+        messages[i + 1]?.uid !== auth.currentUser.uid &&
+        !isLast
+      )
+        noTail = true;
     }
     // image
     const imageElement = new Image();
