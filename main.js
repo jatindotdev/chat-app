@@ -12,6 +12,9 @@ import {
   query,
   orderBy,
   addDoc,
+  setDoc,
+  doc,
+  getDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { createUser } from './utils/createUser';
@@ -67,19 +70,6 @@ const chatList = document.querySelector(
   'section.chat .chat-app .chat-window .chat-list'
 );
 const loader = document.querySelector('.loader');
-
-/*
-  createUser({
-    displayName,
-    photoURL,
-    sentByUser,
-    status,
-    recentMessage,
-    chatUserName,
-    chatUserImg,
-    chatUserStatus,
-  })
-*/
 
 // remove chat section to add later
 chatSection.remove();
@@ -142,10 +132,6 @@ const loadMessages = (messages) => {
     container.classList.add(messageClass);
     let noTail;
     const isLast = i === messages.length - 1;
-    // const noTail =
-    // !isLast &&
-    // messages[i + 1]?.uid !== auth.currentUser.uid &&
-    // lastMessageUid !== message.uid;
 
     if (messageClass === 'sent') {
       noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
@@ -226,7 +212,37 @@ const continueToChat = () => {
   onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
     loadMessages(data.docs.map((message) => message.data()));
   });
+  onSnapshot(collection(db, 'users'), (users) => {
+    const chatsList = [];
+    users.docs.forEach((user) => {
+      if (user.id === auth.currentUser.uid) return;
+      const { userName: displayName, photoURL } = user.data();
+      chatsList.push(
+        createUser({
+          displayName,
+          photoURL,
+          chatUserImg,
+          chatUserName,
+          chatUserStatus,
+        })
+      );
+    });
+    chats.replaceChildren(...chatsList);
+  });
   chatInputField.focus();
+
+  /*
+  createUser({
+    displayName,
+    photoURL,
+    sentByUser,
+    status,
+    recentMessage,
+    chatUserName,
+    chatUserImg,
+    chatUserStatus,
+  })
+  */
 };
 
 const signOut = () => {
@@ -241,7 +257,15 @@ const signOut = () => {
   }, 0);
 };
 
-const setData = (user) => {
+const setData = async (user) => {
+  const docSnap = await getDoc(doc(db, 'users', user.uid));
+  if (!docSnap.exists()) {
+    setDoc(doc(db, 'users', user.uid), {
+      userName: user.displayName,
+      userEmail: user.email,
+      photoURL: user.photoURL,
+    });
+  }
   userImg.src = user.photoURL ?? '/no-avatar.svg';
   userImg.style.display = 'block';
   userName.textContent = user.displayName;
