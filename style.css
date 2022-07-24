@@ -506,7 +506,7 @@ section.chat
   .user
   .user-info
   .bottom-row
-  .recent-message {
+  .user-email {
   width: 200px;
   font-size: 0.875rem;
   color: #ffffff83;

@@ -15,6 +15,7 @@ import {
   setDoc,
   doc,
   getDoc,
+  collectionGroup,
   serverTimestamp,
 } from 'firebase/firestore';
 import { createUser } from './utils/createUser';
@@ -209,18 +210,23 @@ const continueToChat = () => {
     loginSection.remove();
     chatSection.classList.add('animate');
   }, 0);
-  onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
-    loadMessages(data.docs.map((message) => message.data()));
-  });
-  onSnapshot(collection(db, 'users'), (users) => {
+  const unsubMessages = onSnapshot(
+    query(collectionRef, orderBy('createdAt')),
+    (data) => {
+      loadMessages(data.docs.map((message) => message.data()));
+    }
+  );
+  const unsubUsers = onSnapshot(collection(db, 'users'), (users) => {
     const chatsList = [];
     users.docs.forEach((user) => {
       if (user.id === auth.currentUser.uid) return;
-      const { userName: displayName, photoURL } = user.data();
+      const { userName: displayName, photoURL, userEmail } = user.data();
       chatsList.push(
         createUser({
           displayName,
           photoURL,
+          userEmail,
+          status: 'online',
           chatUserImg,
           chatUserName,
           chatUserStatus,
@@ -230,19 +236,10 @@ const continueToChat = () => {
     chats.replaceChildren(...chatsList);
   });
   chatInputField.focus();
-
-  /*
-  createUser({
-    displayName,
-    photoURL,
-    sentByUser,
-    status,
-    recentMessage,
-    chatUserName,
-    chatUserImg,
-    chatUserStatus,
-  })
-  */
+  document.addEventListener('beforeunload', () => {
+    unsubUsers();
+    unsubMessages();
+  });
 };
 
 const signOut = () => {

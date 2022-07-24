@@ -2,8 +2,7 @@ export const createUser = ({
   displayName,
   photoURL,
   status,
-  recentMessage,
-  sentByUser,
+  userEmail,
   chatUserName,
   chatUserImg,
   chatUserStatus,
@@ -40,36 +39,16 @@ export const createUser = ({
   const userStatus = document.createElement('span');
   userStatus.classList.add('user-status');
   if (status == 'online') userStatus.classList.add('online');
-  userStatus.textContent += status ? status : '';
+  userStatus.textContent += status ? status : 'unknown';
 
   // bottom row div
   const bottomRow = document.createElement('div');
   bottomRow.classList.add('bottom-row');
 
-  // arrow Svg
-  const arrowSvg = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'svg'
-  );
-  if (!sentByUser) arrowSvg.classList.add('hidden');
-  arrowSvg.setAttribute('width', '24');
-  arrowSvg.setAttribute('height', '24');
-  arrowSvg.setAttribute('viewBox', '0 0 24 24');
-
-  // arrow Svg Path attrib
-  const arrowSvgPath = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'path'
-  );
-  arrowSvgPath.setAttribute(
-    'd',
-    'm2.394 13.742 4.743 3.62 7.616-8.704-1.506-1.316-6.384 7.296-3.257-2.486zm19.359-5.084-1.506-1.316-6.369 7.279-.753-.602-1.25 1.562 2.247 1.798z'
-  );
-
   // paragraph element
   const pElement = document.createElement('p');
-  pElement.classList.add('recent-message');
-  pElement.textContent += recentMessage ? recentMessage : `start some chat`;
+  pElement.classList.add('user-email');
+  pElement.textContent += userEmail;
 
   // appending all element
   user.appendChild(userImg);
@@ -79,8 +58,6 @@ export const createUser = ({
   topRow.appendChild(userDisplayName);
   topRow.appendChild(userStatus);
   userInfo.appendChild(bottomRow);
-  bottomRow.appendChild(arrowSvg);
-  arrowSvg.appendChild(arrowSvgPath);
   bottomRow.appendChild(pElement);
 
   user.addEventListener('click', (e) => {
