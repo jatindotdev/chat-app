@@ -127,8 +127,10 @@ const signIn = () => {
 const loadMessages = (messages) => {
   const filteredMessages = messages.filter((message) =>
     receiverUID
-      ? message.senderUID === auth.currentUser.uid &&
-        message.receiverUID === receiverUID
+      ? (message.senderUID === auth.currentUser.uid &&
+          message.receiverUID === receiverUID) ||
+        (message.senderUID === receiverUID &&
+          message.receiverUID === auth.currentUser.uid)
       : message.receiverUID === 'group'
   );
   const messageNodes = [];
