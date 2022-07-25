@@ -800,11 +800,11 @@ section.animate {
   display: none;
 }
 
-@media screen and (max-height: 400px) {
+/* @media screen and (max-height: 400px) {
   section.chat .chat-app .sidebar {
     width: 40%;
   }
-}
+} */
 
 @media screen and (max-width: 650px) {
   section.login .login-card {
@@ -822,5 +822,11 @@ section.animate {
   section.chat .chat-app .chat-window {
     height: 100%;
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  section.chat .chat-app .sidebar {
+    width: 40%;
   }
 }
