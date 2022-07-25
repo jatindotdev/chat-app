@@ -2,14 +2,18 @@ export const createUser = ({
   displayName,
   photoURL,
   status,
+  isDefault,
   userEmail,
+  userUID,
   chatUserName,
   chatUserImg,
   chatUserStatus,
+  changeReceiverUID,
 }) => {
   // user div
   const user = document.createElement('div');
   user.classList.add('user');
+  if (isDefault) user.classList.add('active');
 
   // user image div
   const userImg = document.createElement('div');
@@ -75,6 +79,7 @@ export const createUser = ({
       e.currentTarget.querySelector('span.user-status').classList;
     chatUserStatus.textContent =
       e.currentTarget.querySelector('span.user-status').textContent;
+    changeReceiverUID(userUID);
 
     // always call these function
     document

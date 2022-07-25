@@ -15,7 +15,7 @@ import {
   setDoc,
   doc,
   getDoc,
-  collectionGroup,
+  getDocs,
   serverTimestamp,
 } from 'firebase/firestore';
 import { createUser } from './utils/createUser';
@@ -79,6 +79,7 @@ chatSection.remove();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const collectionRef = collection(db, 'messages');
+let receiverUID = '';
 
 const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -124,32 +125,40 @@ const signIn = () => {
 };
 
 const loadMessages = (messages) => {
+  const filteredMessages = messages.filter((message) =>
+    receiverUID
+      ? message.senderUID === auth.currentUser.uid &&
+        message.receiverUID === receiverUID
+      : message.receiverUID === 'group'
+  );
   const messageNodes = [];
   let lastMessageUid;
-  messages.forEach((message, i) => {
+  filteredMessages.forEach((message, i) => {
     const container = document.createElement('div');
     const messageClass =
-      message.uid === auth.currentUser.uid ? 'sent' : 'received';
+      message.senderUID === auth.currentUser.uid ? 'sent' : 'received';
     container.classList.add(messageClass);
     let noTail;
-    const isLast = i === messages.length - 1;
+    const isLast = i === filteredMessages.length - 1;
 
     if (messageClass === 'sent') {
-      noTail = !isLast && messages[i + 1]?.uid === auth.currentUser.uid;
+      noTail =
+        !isLast && filteredMessages[i + 1]?.senderUID === auth.currentUser.uid;
     } else if (messageClass === 'received') {
       if (!isLast) {
         if (
-          lastMessageUid !== message.uid &&
-          messages[i + 1]?.uid !== message.uid
+          lastMessageUid !== message.senderUID &&
+          filteredMessages[i + 1]?.senderUID !== message.senderUID
         )
           noTail = false;
         else if (
-          lastMessageUid !== message.uid &&
-          messages[i + 1]?.uid !== lastMessageUid
+          lastMessageUid !== message.senderUID &&
+          filteredMessages[i + 1]?.senderUID !== lastMessageUid
         )
           noTail = true;
-        else if (lastMessageUid !== message.uid) noTail = false;
-        else if (messages[i + 1]?.uid === lastMessageUid) noTail = true;
+        else if (lastMessageUid !== message.senderUID) noTail = false;
+        else if (filteredMessages[i + 1]?.senderUID === lastMessageUid)
+          noTail = true;
       } else noTail = false;
     }
 
@@ -177,7 +186,7 @@ const loadMessages = (messages) => {
       ? container.appendChild(span)
       : container.append(imageElement, span);
     messageNodes.push(container);
-    lastMessageUid = message.uid;
+    lastMessageUid = message.senderUID;
   });
   const scrollDiv = document.createElement('div');
   scrollDiv.classList.add('scrollTo');
@@ -196,11 +205,19 @@ chatSendButton.addEventListener('click', () => {
   addDoc(collectionRef, {
     text: chatInputField.value.trim(),
     createdAt: serverTimestamp(),
-    uid,
+    senderUID: uid,
     photoURL,
+    receiverUID: receiverUID ? receiverUID : 'group',
   });
   chatInputField.value = null;
 });
+
+const changeReceiverUID = async (UID) => {
+  if (UID) receiverUID = UID;
+  else receiverUID = '';
+  const data = await getDocs(query(collectionRef, orderBy('createdAt')));
+  loadMessages(data.docs.map((message) => message.data()));
+};
 
 const continueToChat = () => {
   window.removeEventListener('mousemove', mouseMoveEvent);
@@ -210,39 +227,51 @@ const continueToChat = () => {
     loginSection.remove();
     chatSection.classList.add('animate');
   }, 0);
-  const unsubMessages = onSnapshot(
-    query(collectionRef, orderBy('createdAt')),
-    (data) => {
-      loadMessages(data.docs.map((message) => message.data()));
-    }
-  );
-  const unsubUsers = onSnapshot(collection(db, 'users'), (users) => {
-    const chatsList = [];
-    users.docs.forEach((user) => {
-      if (user.id === auth.currentUser.uid) return;
-      const { userName: displayName, photoURL, userEmail } = user.data();
+  onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
+    loadMessages(data.docs.map((message) => message.data()));
+  });
+  onSnapshot(
+    query(collection(db, 'users'), orderBy('loginDate', 'desc')),
+    (users) => {
+      const chatsList = [];
       chatsList.push(
         createUser({
-          displayName,
-          photoURL,
-          userEmail,
+          displayName: 'Velle Log',
+          userEmail: 'vellelog@group.com',
+          userUID: null,
           status: 'online',
+          isDefault: true,
           chatUserImg,
           chatUserName,
           chatUserStatus,
+          changeReceiverUID: changeReceiverUID,
         })
       );
-    });
-    chats.replaceChildren(...chatsList);
-  });
+      users.docs.forEach((user) => {
+        if (user.id === auth.currentUser.uid) return;
+        const { userName: displayName, photoURL, userEmail } = user.data();
+        chatsList.push(
+          createUser({
+            displayName,
+            photoURL,
+            userEmail,
+            userUID: user.id,
+            status: 'online',
+            chatUserImg,
+            chatUserName,
+            chatUserStatus,
+            changeReceiverUID: changeReceiverUID,
+          })
+        );
+      });
+      chats.replaceChildren(...chatsList);
+    }
+  );
   chatInputField.focus();
-  document.addEventListener('beforeunload', () => {
-    unsubUsers();
-    unsubMessages();
-  });
 };
 
 const signOut = () => {
+  unsubscribeAuthState();
   auth.signOut();
   window.removeEventListener('mousemove', mouseMoveEvent);
   window.removeEventListener('keyup', enterKeyEvent);
@@ -261,6 +290,7 @@ const setData = async (user) => {
       userName: user.displayName,
       userEmail: user.email,
       photoURL: user.photoURL,
+      loginDate: serverTimestamp(),
     });
   }
   userImg.src = user.photoURL ?? '/no-avatar.svg';
