@@ -298,10 +298,8 @@ section.chat {
 }
 
 section.chat .chat-app {
-  height: 85vh;
-  width: 80vw;
-  border: 1px solid #3f3f46;
-  border-radius: 8px;
+  height: 100%;
+  width: 100%;
   background-color: #202023;
   box-shadow: var(--base-shadow);
   display: flex;
@@ -508,7 +506,7 @@ section.chat
   .user-info
   .bottom-row
   .user-email {
-  width: 200px;
+  width: 70%;
   font-size: 0.875rem;
   color: #ffffff83;
   text-overflow: ellipsis;
@@ -818,13 +816,5 @@ section.animate {
   section.chat .chat-app .chat-window {
     height: 100%;
     width: 100%;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  section.chat .chat-app {
-    height: 100%;
-    width: 100%;
-    border-radius: 0;
   }
 }
