@@ -800,6 +800,12 @@ section.animate {
   display: none;
 }
 
+@media screen and (max-height: 400px) {
+  section.chat .chat-app .sidebar {
+    width: 40%;
+  }
+}
+
 @media screen and (max-width: 650px) {
   section.login .login-card {
     width: 100%;
