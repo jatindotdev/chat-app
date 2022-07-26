@@ -100,6 +100,7 @@ const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
       loader.remove();
       loginSection.classList.add('animate');
     }, 500);
+    unsubscribeAuthState();
   }
   document.activeElement.blur();
 });
@@ -273,7 +274,6 @@ const continueToChat = () => {
 };
 
 const signOut = () => {
-  unsubscribeAuthState();
   auth.signOut();
   window.removeEventListener('mousemove', mouseMoveEvent);
   window.removeEventListener('keyup', enterKeyEvent);
