@@ -18,6 +18,7 @@ import {
   getDocs,
   serverTimestamp,
 } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createUser } from './utils/createUser';
 
 const app = initializeApp({
@@ -61,14 +62,32 @@ const chatUserName = document.querySelector(
 const chatUserStatus = document.querySelector(
   'section.chat .chat-app .chat-window .chat-header .chat-info .user-data .user-status'
 );
-const chatInputField = document.querySelector(
-  'section.chat .chat-app .chat-window .chat-utils input'
+const imgSelectButton = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-utils .chat-utils-b button.img-send-button'
+);
+const fileSelector = document.querySelector(
+  'section.chat .chat-app .chat-window .chat-utils .chat-utils-b button.img-send-button input'
 );
 const chatSendButton = document.querySelector(
-  'section.chat .chat-app .chat-window .chat-utils button'
+  'section.chat .chat-app .chat-window .chat-utils .chat-utils-b button.send-button'
+);
+const chatInputField = document.querySelector(
+  '#app > section > div > div.chat-window > div.chat-utils > div > input'
 );
 const chatList = document.querySelector(
   'section.chat .chat-app .chat-window .chat-list'
+);
+const imagePreviewDiv = document.querySelector(
+  '#app > section > div > div.chat-window > div.chat-utils > div.image-upload'
+);
+const previewImage = document.querySelector(
+  '#app > section.chat > div > div.chat-window > div.chat-utils > div.image-upload > img'
+);
+const removeFilesButton = document.querySelector(
+  '#app > section > div > div.chat-window > div.chat-utils > div.image-upload > div'
+);
+const previewImageDetail = document.querySelector(
+  '#app > section > div > div.chat-window > div.chat-utils > div.image-upload > span'
 );
 const loader = document.querySelector('.loader');
 
@@ -79,6 +98,7 @@ chatSection.remove();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const collectionRef = collection(db, 'messages');
+const storage = getStorage(app);
 let receiverUID = '';
 
 const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
@@ -166,28 +186,62 @@ const loadMessages = (messages) => {
     }
 
     // image
-    const imageElement = new Image();
-    imageElement.setAttribute(`height`, `45px`);
-    imageElement.setAttribute(`width`, `45px`);
-    imageElement.setAttribute(`alt`, ``);
-    imageElement.src = message.photoURL ? message.photoURL : '/no-avatar.svg';
+    const userLogo = new Image();
+    userLogo.classList.add('user-logo');
+    userLogo.setAttribute(`height`, `45px`);
+    userLogo.setAttribute(`width`, `45px`);
+    userLogo.setAttribute(`alt`, ``);
+    userLogo.src = message.photoURL ? message.photoURL : '/no-avatar.svg';
+
+    // if image is present
+    if (message.imageURL) {
+      getDownloadURL(ref(storage, message.imageURL)).then((url) => {
+        const mDiv = document.createElement('div');
+        mDiv.classList.add('chat-image-wrapper');
+
+        const image = new Image();
+        image.classList.add('chat-img');
+        image.setAttribute(`height`, `250px`);
+        image.setAttribute(`width`, `250px`);
+        image.setAttribute(`alt`, `not found`);
+        image.setAttribute('src', url);
+        mDiv.classList.add(messageClass);
+        if (noTail) {
+          mDiv.classList.add('noTail');
+          container.classList.add('noTail');
+        }
+
+        mDiv.appendChild(image);
+
+        messageClass === 'sent'
+          ? noTail
+            ? container.appendChild(mDiv)
+            : container.append(mDiv, userLogo)
+          : noTail
+          ? container.appendChild(mDiv)
+          : container.append(userLogo, mDiv);
+      });
+    }
 
     // message span
-    const span = document.createElement('span');
-    span.classList.add('shared');
-    span.classList.add(messageClass);
-    if (noTail) {
-      span.classList.add('noTail');
-      container.classList.add('noTail');
-    }
-    span.textContent = message.text;
-    messageClass === 'sent'
-      ? noTail
+    if (message.text) {
+      const span = document.createElement('span');
+      span.classList.add('shared');
+      span.classList.add(messageClass);
+      if (noTail) {
+        span.classList.add('noTail');
+        container.classList.add('noTail');
+      }
+      span.textContent = message.text;
+
+      messageClass === 'sent'
+        ? noTail
+          ? container.appendChild(span)
+          : container.append(span, userLogo)
+        : noTail
         ? container.appendChild(span)
-        : container.append(span, imageElement)
-      : noTail
-      ? container.appendChild(span)
-      : container.append(imageElement, span);
+        : container.append(userLogo, span);
+    }
     messageNodes.push(container);
     lastMessageUid = message.senderUID;
   });
@@ -195,16 +249,56 @@ const loadMessages = (messages) => {
   scrollDiv.classList.add('scrollTo');
   messageNodes.push(scrollDiv);
   chatList.replaceChildren(...messageNodes);
-  document
-    .querySelector(
-      '#app > section > div > div.chat-window > div.chat-wrapper > div > div.scrollTo'
-    )
-    .scrollIntoView();
+  setTimeout(() => {
+    document
+      .querySelector(
+        '#app > section > div > div.chat-window > div.chat-wrapper > div > div.scrollTo'
+      )
+      .scrollIntoView();
+  }, 500);
 };
 
+fileSelector.onchange = (e) => {
+  if (!e.target.files[0]) return;
+  const fileReader = new FileReader();
+  previewImageDetail.textContent = e.target.files[0].name;
+  fileReader.onloadend = (e) => {
+    previewImage.setAttribute('src', e.target.result);
+    imagePreviewDiv.style.display = 'block';
+  };
+  fileReader.readAsDataURL(e.target.files[0]);
+};
+
+const removeFiles = () => {
+  fileSelector.value = null;
+  imagePreviewDiv.style.display = 'none';
+  previewImage.removeAttribute('src');
+  previewImageDetail.textContent = '';
+};
+
+removeFilesButton.addEventListener('click', removeFiles);
+
+imgSelectButton.addEventListener('click', () => {
+  fileSelector.click();
+});
+
 chatSendButton.addEventListener('click', () => {
-  if (!chatInputField.value.trim()) return;
+  const file = fileSelector.files[0];
   const { uid, photoURL } = auth.currentUser;
+  if (file) {
+    const imageRef = ref(storage, `${uid}-${file.name}`);
+    uploadBytes(imageRef, file).then((result) => {
+      console.log(result);
+    });
+    addDoc(collectionRef, {
+      imageURL: `${uid}-${file.name}`,
+      createdAt: serverTimestamp(),
+      senderUID: uid,
+      photoURL,
+      receiverUID: receiverUID ? receiverUID : 'group',
+    });
+  }
+  if (!chatInputField.value.trim()) return;
   addDoc(collectionRef, {
     text: chatInputField.value.trim(),
     createdAt: serverTimestamp(),
@@ -213,6 +307,7 @@ chatSendButton.addEventListener('click', () => {
     receiverUID: receiverUID ? receiverUID : 'group',
   });
   chatInputField.value = null;
+  removeFiles();
 });
 
 const changeReceiverUID = async (UID) => {

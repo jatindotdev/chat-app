@@ -171,7 +171,7 @@ button.primary {
   color: #ffffff;
 }
 
-button.primary:focus {
+button.primary:active {
   outline: 2px solid #db1d70;
   outline-offset: 2px;
 }
@@ -186,7 +186,7 @@ button.secondary {
   border: 1px solid #3f3f46;
 }
 
-button.secondary:focus {
+button.secondary:active {
   background-color: rgba(255, 255, 255, 0.05);
   outline: 2px solid #3f3f46;
   outline-offset: 2px;
@@ -342,7 +342,7 @@ section.chat .chat-app .sidebar .menu button.logout-button {
   font-size: 0.875rem;
 }
 
-section.chat .chat-app .sidebar .menu button.logout-button:focus {
+section.chat .chat-app .sidebar .menu button.logout-button:active {
   outline: 0;
   background-color: #ffffff0d;
 }
@@ -546,7 +546,7 @@ section.chat .chat-app .chat-window .chat-header button.menu-button {
   padding: 0.5rem;
 }
 
-section.chat .chat-app .chat-window .chat-header button.menu-button:focus {
+section.chat .chat-app .chat-window .chat-header button.menu-button:active {
   outline: 0;
   background-color: #ffffff0d;
 }
@@ -626,7 +626,22 @@ section.chat .chat-app .chat-window .chat-list {
   scroll-behavior: smooth;
 }
 
-section.chat .chat-app .chat-window .chat-list div img {
+section.chat .chat-app .chat-window .chat-list div .chat-image-wrapper {
+  height: 250px;
+  min-width: 250px;
+  border-radius: 8px;
+}
+
+section.chat .chat-app .chat-window .chat-list div img.chat-img {
+  height: 250px;
+  min-width: 250px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: #3f3f3f;
+}
+
+section.chat .chat-app .chat-window .chat-list div img.user-logo {
   z-index: 99;
   border-radius: 50%;
   user-select: none;
@@ -707,6 +722,22 @@ section.chat .chat-app .chat-window .chat-list span.received::after {
   border-bottom-right-radius: 10px;
 }
 
+section.chat
+  .chat-app
+  .chat-window
+  .chat-list
+  div.chat-image-wrapper.received.noTail {
+  margin-left: 53px;
+}
+
+section.chat
+  .chat-app
+  .chat-window
+  .chat-list
+  div.chat-image-wrapper.sent.noTail {
+  margin-right: 53px;
+}
+
 section.chat .chat-app .chat-window .chat-list span.received.noTail {
   margin-left: 53px;
 }
@@ -725,13 +756,7 @@ section.chat .chat-app .chat-window .chat-list .noTail::after {
 }
 
 section.chat .chat-app .chat-window .chat-utils {
-  /* position: absolute; */
-  /* bottom: 0; */
-  order: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  order: 4;
   width: 100%;
   padding: 0.75rem 1rem;
   border-top: 1px solid #3f3f46;
@@ -740,6 +765,76 @@ section.chat .chat-app .chat-window .chat-utils {
   flex: none;
   width: 100%;
   user-select: none;
+}
+
+section.chat .chat-app .chat-window .chat-utils .image-upload {
+  margin: 0.5rem;
+  margin-left: 3rem;
+  margin-bottom: 1.5rem;
+  width: max-content;
+  position: relative;
+  display: none;
+  transition: 0.4s;
+  z-index: -1;
+  cursor: pointer;
+}
+
+section.chat .chat-app .chat-window .chat-utils .image-upload .blur {
+  height: 250px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: 0.4s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  color: #e3e3e3;
+  border-radius: 8px;
+}
+
+section.chat .chat-app .chat-window .chat-utils .image-upload .blur:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+section.chat .chat-app .chat-window .chat-utils .image-upload span {
+  position: absolute;
+  bottom: 0;
+  padding: 0.5rem;
+  padding-top: 2rem;
+  padding-bottom: 0.35rem;
+  border-radius: 8px;
+  width: 100%;
+  color: #e3e3e3;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+}
+
+section.chat .chat-app .chat-window .chat-utils .image-upload svg.delete-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  fill: #e3e3e3;
+  background-color: red;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+section.chat .chat-app .chat-window .chat-utils .image-upload .image-preview {
+  border-radius: 8px;
+  object-fit: contain;
+  height: 250px;
+  min-width: 250px;
+  max-width: 600px;
+}
+
+section.chat .chat-app .chat-window .chat-utils .chat-utils-b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #202023;
 }
 
 section.chat .chat-app .chat-window .chat-utils input {
@@ -752,16 +847,32 @@ section.chat .chat-app .chat-window .chat-utils input {
   outline: none;
 }
 
+section.chat .chat-app .chat-window .chat-utils button.img-send-button {
+  background-color: transparent;
+  color: #ffffff8a;
+  fill: #ffffff8a;
+  padding: 0.5rem;
+  transition: 0.4s;
+}
+
+section.chat .chat-app .chat-window .chat-utils button.img-send-button:active {
+  outline: 0;
+  background-color: #313135;
+}
+
+section.chat .chat-app .chat-window .chat-utils button.img-send-button:hover {
+  background-color: #313135;
+}
+
 section.chat .chat-app .chat-window .chat-utils button.send-button {
   background-color: transparent;
   color: #ffffff8a;
   fill: #ffffff8a;
   padding: 0.5rem;
-  border: 1px solid transparent;
   transition: 0.4s;
 }
 
-section.chat .chat-app .chat-window .chat-utils button.send-button:focus {
+section.chat .chat-app .chat-window .chat-utils button.send-button:active {
   outline: 0;
   background-color: #313135;
 }
