@@ -966,6 +966,10 @@ section.animate {
   section.chat .chat-app .chat-window .chat-list div img.chat-img {
     max-width: 275px;
   }
+
+  section.chat .chat-app .chat-window .chat-utils .image-upload .image-preview {
+    max-width: 275px;
+  }
 }
 
 @media screen and (max-width: 999px) {
