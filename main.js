@@ -284,7 +284,7 @@ const loadChats = (users, inputVal) => {
   const chatsList = [];
   const filteredUsers = users.docs.filter((user) =>
     inputVal
-      ? user.data().userName.includes(inputVal) ||
+      ? user.data().userName.toLowerCase().includes(inputVal) ||
         user.data().userEmail.includes(inputVal)
       : true
   );
@@ -411,7 +411,7 @@ const continueToChat = () => {
     }
   );
   searchFilterInput.addEventListener('input', (e) =>
-    loadChats(globalData['users'], e.currentTarget.value)
+    loadChats(globalData['users'], e.currentTarget.value.toLowerCase())
   );
   chatInputField.focus();
 };
