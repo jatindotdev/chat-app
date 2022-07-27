@@ -355,46 +355,46 @@ const continueToChat = () => {
     loginSection.remove();
     chatSection.classList.add('animate');
   }, 0);
-  // onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
-  //   loadMessages(data.docs.map((message) => message.data()));
-  // });
-  // onSnapshot(
-  //   query(collection(db, 'users'), orderBy('loginDate', 'desc')),
-  //   (users) => {
-  //     const chatsList = [];
-  //     chatsList.push(
-  //       createUser({
-  //         displayName: 'Velle Log',
-  //         userEmail: 'vellelog@group.com',
-  //         userUID: null,
-  //         status: 'online',
-  //         isDefault: true,
-  //         chatUserImg,
-  //         chatUserName,
-  //         chatUserStatus,
-  //         changeReceiverUID: changeReceiverUID,
-  //       })
-  //     );
-  //     users.docs.forEach((user) => {
-  //       if (user.id === auth.currentUser.uid) return;
-  //       const { userName: displayName, photoURL, userEmail } = user.data();
-  //       chatsList.push(
-  //         createUser({
-  //           displayName,
-  //           photoURL,
-  //           userEmail,
-  //           userUID: user.id,
-  //           status: 'online',
-  //           chatUserImg,
-  //           chatUserName,
-  //           chatUserStatus,
-  //           changeReceiverUID: changeReceiverUID,
-  //         })
-  //       );
-  //     });
-  //     chats.replaceChildren(...chatsList);
-  //   }
-  // );
+  onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
+    loadMessages(data.docs.map((message) => message.data()));
+  });
+  onSnapshot(
+    query(collection(db, 'users'), orderBy('loginDate', 'desc')),
+    (users) => {
+      const chatsList = [];
+      chatsList.push(
+        createUser({
+          displayName: 'Velle Log',
+          userEmail: 'vellelog@group.com',
+          userUID: null,
+          status: 'online',
+          isDefault: true,
+          chatUserImg,
+          chatUserName,
+          chatUserStatus,
+          changeReceiverUID: changeReceiverUID,
+        })
+      );
+      users.docs.forEach((user) => {
+        if (user.id === auth.currentUser.uid) return;
+        const { userName: displayName, photoURL, userEmail } = user.data();
+        chatsList.push(
+          createUser({
+            displayName,
+            photoURL,
+            userEmail,
+            userUID: user.id,
+            status: 'online',
+            chatUserImg,
+            chatUserName,
+            chatUserStatus,
+            changeReceiverUID: changeReceiverUID,
+          })
+        );
+      });
+      chats.replaceChildren(...chatsList);
+    }
+  );
   chatInputField.focus();
 };
 
