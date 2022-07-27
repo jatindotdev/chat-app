@@ -628,8 +628,6 @@ section.chat .chat-app .chat-window .chat-list {
 }
 
 section.chat .chat-app .chat-window .chat-list div .chat-image-wrapper {
-  height: 250px;
-  min-width: 250px;
   border-radius: 8px;
 }
 
@@ -646,6 +644,19 @@ section.chat .chat-app .chat-window .chat-list div img.user-logo {
   z-index: 99;
   border-radius: 50%;
   user-select: none;
+}
+
+section
+  > div
+  > div.chat-window
+  > div.chat-wrapper
+  > div.chat-list
+  > div
+  > div.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
 }
 
 section.chat .chat-app .chat-window .chat-list .shared {

@@ -220,6 +220,8 @@ const loadMessages = (messages) => {
     userLogo.setAttribute(`width`, `45px`);
     userLogo.setAttribute(`alt`, ``);
     userLogo.src = message.photoURL ? message.photoURL : '/no-avatar.svg';
+    const chatContainer = document.createElement('div');
+    chatContainer.classList.add('chat-container');
 
     // if image is present
     if (message.imageURL) {
@@ -228,8 +230,6 @@ const loadMessages = (messages) => {
 
       const image = new Image();
       image.classList.add('chat-img');
-      image.setAttribute(`height`, `250px`);
-      image.setAttribute(`width`, `250px`);
       image.setAttribute(`alt`, `not found`);
       image.setAttribute('src', message.imageURL);
       mDiv.classList.add(messageClass);
@@ -239,16 +239,8 @@ const loadMessages = (messages) => {
       }
 
       mDiv.appendChild(image);
-
-      messageClass === 'sent'
-        ? noTail
-          ? container.appendChild(mDiv)
-          : container.append(mDiv, userLogo)
-        : noTail
-        ? container.appendChild(mDiv)
-        : container.append(userLogo, mDiv);
+      chatContainer.appendChild(image);
     }
-    // message span
     if (message.text) {
       const span = document.createElement('span');
       span.classList.add('shared');
@@ -258,15 +250,15 @@ const loadMessages = (messages) => {
         container.classList.add('noTail');
       }
       span.textContent = message.text;
-
-      messageClass === 'sent'
-        ? noTail
-          ? container.appendChild(span)
-          : container.append(span, userLogo)
-        : noTail
-        ? container.appendChild(span)
-        : container.append(userLogo, span);
+      chatContainer.appendChild(span);
     }
+    messageClass === 'sent'
+      ? noTail
+        ? container.appendChild(chatContainer)
+        : container.append(chatContainer, userLogo)
+      : noTail
+      ? container.appendChild(chatContainer)
+      : container.append(userLogo, chatContainer);
     messageNodes.push(container);
     lastMessageUid = message.senderUID;
   });
@@ -313,13 +305,16 @@ imgSelectButton.addEventListener('click', () => {
 });
 
 chatSendButton.addEventListener('click', () => {
+  const inputFieldValue = chatInputField.value.trim();
   const file = fileSelector.files[0];
   const { uid, photoURL } = auth.currentUser;
+  if (!inputFieldValue && !file) return;
   if (file) {
     const fileReader = new FileReader();
     fileReader.onloadend = (e) => {
       addDoc(collectionRef, {
-        imageURL: e.target.result,
+        text: inputFieldValue,
+        imageURL: e.target.result ? e.target.result : '',
         createdAt: serverTimestamp(),
         senderUID: uid,
         photoURL,
@@ -328,15 +323,16 @@ chatSendButton.addEventListener('click', () => {
     };
     fileReader.readAsDataURL(file);
     removeFiles();
+  } else {
+    addDoc(collectionRef, {
+      text: inputFieldValue,
+      imageURL: '',
+      createdAt: serverTimestamp(),
+      senderUID: uid,
+      photoURL,
+      receiverUID: receiverUID ? receiverUID : 'group',
+    });
   }
-  if (!chatInputField.value.trim()) return;
-  addDoc(collectionRef, {
-    text: chatInputField.value.trim(),
-    createdAt: serverTimestamp(),
-    senderUID: uid,
-    photoURL,
-    receiverUID: receiverUID ? receiverUID : 'group',
-  });
   chatInputField.value = null;
 });
 
