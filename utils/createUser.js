@@ -84,12 +84,7 @@ export const createUser = ({
     // always call these function
     document
       .querySelector(
-        '#app > section > div > div.chat-window > div.chat-utils > input[type=text]'
-      )
-      .removeAttribute('disabled');
-    document
-      .querySelector(
-        '#app > section > div > div.chat-window > div.chat-utils > input[type=text]'
+        '#app > section > div > div.chat-window > div.chat-utils > div.chat-utils-b > input'
       )
       .focus();
   });

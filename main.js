@@ -18,7 +18,6 @@ import {
   getDocs,
   serverTimestamp,
 } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createUser } from './utils/createUser';
 
 const app = initializeApp({
@@ -98,8 +97,36 @@ chatSection.remove();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const collectionRef = collection(db, 'messages');
-const storage = getStorage(app);
 let receiverUID = '';
+
+const showToast = (
+  message,
+  { bottomOffset, timeOut } = { bottomOffset: '20px', timeOut: 3000 }
+) => {
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .toast.show {
+      opacity: 1;
+      bottom: ${bottomOffset};
+      transition: 0.4s;
+    }
+  `;
+  document.getElementsByTagName('head')[0].appendChild(style);
+
+  const toast = document.createElement('span');
+  toast.classList.add('toast');
+  toast.textContent = message;
+  root.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 0);
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => {
+      toast.remove();
+      style.remove();
+    }, 1000);
+  }, timeOut);
+};
 
 const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -120,7 +147,6 @@ const unsubscribeAuthState = onAuthStateChanged(auth, (user) => {
       loader.remove();
       loginSection.classList.add('animate');
     }, 500);
-    unsubscribeAuthState();
   }
   document.activeElement.blur();
 });
@@ -142,7 +168,9 @@ const mouseMoveEvent = () => {
 
 const signIn = () => {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider).then((result) => setData(result.user));
+  signInWithPopup(auth, provider)
+    .then((result) => setData(result.user))
+    .catch(() => showToast('Error: please login in!'));
 };
 
 const loadMessages = (messages) => {
@@ -195,34 +223,31 @@ const loadMessages = (messages) => {
 
     // if image is present
     if (message.imageURL) {
-      getDownloadURL(ref(storage, message.imageURL)).then((url) => {
-        const mDiv = document.createElement('div');
-        mDiv.classList.add('chat-image-wrapper');
+      const mDiv = document.createElement('div');
+      mDiv.classList.add('chat-image-wrapper');
 
-        const image = new Image();
-        image.classList.add('chat-img');
-        image.setAttribute(`height`, `250px`);
-        image.setAttribute(`width`, `250px`);
-        image.setAttribute(`alt`, `not found`);
-        image.setAttribute('src', url);
-        mDiv.classList.add(messageClass);
-        if (noTail) {
-          mDiv.classList.add('noTail');
-          container.classList.add('noTail');
-        }
+      const image = new Image();
+      image.classList.add('chat-img');
+      image.setAttribute(`height`, `250px`);
+      image.setAttribute(`width`, `250px`);
+      image.setAttribute(`alt`, `not found`);
+      image.setAttribute('src', message.imageURL);
+      mDiv.classList.add(messageClass);
+      if (noTail) {
+        mDiv.classList.add('noTail');
+        container.classList.add('noTail');
+      }
 
-        mDiv.appendChild(image);
+      mDiv.appendChild(image);
 
-        messageClass === 'sent'
-          ? noTail
-            ? container.appendChild(mDiv)
-            : container.append(mDiv, userLogo)
-          : noTail
+      messageClass === 'sent'
+        ? noTail
           ? container.appendChild(mDiv)
-          : container.append(userLogo, mDiv);
-      });
+          : container.append(mDiv, userLogo)
+        : noTail
+        ? container.appendChild(mDiv)
+        : container.append(userLogo, mDiv);
     }
-
     // message span
     if (message.text) {
       const span = document.createElement('span');
@@ -255,18 +280,7 @@ const loadMessages = (messages) => {
         '#app > section > div > div.chat-window > div.chat-wrapper > div > div.scrollTo'
       )
       .scrollIntoView();
-  }, 500);
-};
-
-fileSelector.onchange = (e) => {
-  if (!e.target.files[0]) return;
-  const fileReader = new FileReader();
-  previewImageDetail.textContent = e.target.files[0].name;
-  fileReader.onloadend = (e) => {
-    previewImage.setAttribute('src', e.target.result);
-    imagePreviewDiv.style.display = 'block';
-  };
-  fileReader.readAsDataURL(e.target.files[0]);
+  }, 1000);
 };
 
 const removeFiles = () => {
@@ -274,6 +288,22 @@ const removeFiles = () => {
   imagePreviewDiv.style.display = 'none';
   previewImage.removeAttribute('src');
   previewImageDetail.textContent = '';
+};
+
+fileSelector.onchange = (e) => {
+  if (!e.target.files[0]) return;
+  if (e.target.files[0].size > 1048487) {
+    showToast('Please select a file under 1 MB.', { bottomOffset: '87px' });
+    removeFiles();
+  } else {
+    const fileReader = new FileReader();
+    previewImageDetail.textContent = e.target.files[0].name;
+    fileReader.onloadend = (e) => {
+      previewImage.setAttribute('src', e.target.result);
+      imagePreviewDiv.style.display = 'block';
+    };
+    fileReader.readAsDataURL(e.target.files[0]);
+  }
 };
 
 removeFilesButton.addEventListener('click', removeFiles);
@@ -286,17 +316,18 @@ chatSendButton.addEventListener('click', () => {
   const file = fileSelector.files[0];
   const { uid, photoURL } = auth.currentUser;
   if (file) {
-    const imageRef = ref(storage, `${uid}-${file.name}`);
-    uploadBytes(imageRef, file).then((result) => {
-      console.log(result);
-    });
-    addDoc(collectionRef, {
-      imageURL: `${uid}-${file.name}`,
-      createdAt: serverTimestamp(),
-      senderUID: uid,
-      photoURL,
-      receiverUID: receiverUID ? receiverUID : 'group',
-    });
+    const fileReader = new FileReader();
+    fileReader.onloadend = (e) => {
+      addDoc(collectionRef, {
+        imageURL: e.target.result,
+        createdAt: serverTimestamp(),
+        senderUID: uid,
+        photoURL,
+        receiverUID: receiverUID ? receiverUID : 'group',
+      });
+    };
+    fileReader.readAsDataURL(file);
+    removeFiles();
   }
   if (!chatInputField.value.trim()) return;
   addDoc(collectionRef, {
@@ -307,7 +338,6 @@ chatSendButton.addEventListener('click', () => {
     receiverUID: receiverUID ? receiverUID : 'group',
   });
   chatInputField.value = null;
-  removeFiles();
 });
 
 const changeReceiverUID = async (UID) => {
@@ -325,51 +355,52 @@ const continueToChat = () => {
     loginSection.remove();
     chatSection.classList.add('animate');
   }, 0);
-  onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
-    loadMessages(data.docs.map((message) => message.data()));
-  });
-  onSnapshot(
-    query(collection(db, 'users'), orderBy('loginDate', 'desc')),
-    (users) => {
-      const chatsList = [];
-      chatsList.push(
-        createUser({
-          displayName: 'Velle Log',
-          userEmail: 'vellelog@group.com',
-          userUID: null,
-          status: 'online',
-          isDefault: true,
-          chatUserImg,
-          chatUserName,
-          chatUserStatus,
-          changeReceiverUID: changeReceiverUID,
-        })
-      );
-      users.docs.forEach((user) => {
-        if (user.id === auth.currentUser.uid) return;
-        const { userName: displayName, photoURL, userEmail } = user.data();
-        chatsList.push(
-          createUser({
-            displayName,
-            photoURL,
-            userEmail,
-            userUID: user.id,
-            status: 'online',
-            chatUserImg,
-            chatUserName,
-            chatUserStatus,
-            changeReceiverUID: changeReceiverUID,
-          })
-        );
-      });
-      chats.replaceChildren(...chatsList);
-    }
-  );
+  // onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
+  //   loadMessages(data.docs.map((message) => message.data()));
+  // });
+  // onSnapshot(
+  //   query(collection(db, 'users'), orderBy('loginDate', 'desc')),
+  //   (users) => {
+  //     const chatsList = [];
+  //     chatsList.push(
+  //       createUser({
+  //         displayName: 'Velle Log',
+  //         userEmail: 'vellelog@group.com',
+  //         userUID: null,
+  //         status: 'online',
+  //         isDefault: true,
+  //         chatUserImg,
+  //         chatUserName,
+  //         chatUserStatus,
+  //         changeReceiverUID: changeReceiverUID,
+  //       })
+  //     );
+  //     users.docs.forEach((user) => {
+  //       if (user.id === auth.currentUser.uid) return;
+  //       const { userName: displayName, photoURL, userEmail } = user.data();
+  //       chatsList.push(
+  //         createUser({
+  //           displayName,
+  //           photoURL,
+  //           userEmail,
+  //           userUID: user.id,
+  //           status: 'online',
+  //           chatUserImg,
+  //           chatUserName,
+  //           chatUserStatus,
+  //           changeReceiverUID: changeReceiverUID,
+  //         })
+  //       );
+  //     });
+  //     chats.replaceChildren(...chatsList);
+  //   }
+  // );
   chatInputField.focus();
 };
 
 const signOut = () => {
   auth.signOut();
+  showToast("You're logged out of your session!");
   window.removeEventListener('mousemove', mouseMoveEvent);
   window.removeEventListener('keyup', enterKeyEvent);
   loginSection.classList.remove('animate');
@@ -390,6 +421,10 @@ const setData = async (user) => {
       loginDate: serverTimestamp(),
     });
   }
+  showToast(`Welcome back, ${user.displayName}!`, {
+    timeOut: 1000,
+    bottomOffset: '20px',
+  });
   userImg.src = user.photoURL ?? '/no-avatar.svg';
   userImg.style.display = 'block';
   userName.textContent = user.displayName;

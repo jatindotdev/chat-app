@@ -318,6 +318,7 @@ section.chat .chat-app .sidebar {
 section.chat .chat-app .sidebar .menu {
   display: flex;
   align-items: center;
+  padding-inline: 0.5rem;
   justify-content: space-between;
   background-color: #242428;
   border-top-left-radius: 8px;
@@ -633,9 +634,9 @@ section.chat .chat-app .chat-window .chat-list div .chat-image-wrapper {
 }
 
 section.chat .chat-app .chat-window .chat-list div img.chat-img {
-  height: 250px;
-  min-width: 250px;
+  max-height: 250px;
   width: auto;
+  max-width: 450px;
   object-fit: contain;
   border-radius: 8px;
   background-color: #3f3f3f;
@@ -673,7 +674,7 @@ section.chat .chat-app .chat-window .chat-list .shared::after {
   background-color: var(--bg); /* All tails have the same bg cutout */
 }
 
-section.chat .chat-app .chat-window .chat-list div.sent {
+section.chat .chat-app .chat-window .chat-list > div.sent {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 25px;
@@ -698,7 +699,7 @@ section.chat .chat-app .chat-window .chat-list span.sent::after {
   border-bottom-left-radius: 10px;
 }
 
-section.chat .chat-app .chat-window .chat-list div.received {
+section.chat .chat-app .chat-window .chat-list > div.received {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 25px;
@@ -722,31 +723,15 @@ section.chat .chat-app .chat-window .chat-list span.received::after {
   border-bottom-right-radius: 10px;
 }
 
-section.chat
-  .chat-app
-  .chat-window
-  .chat-list
-  div.chat-image-wrapper.received.noTail {
+section.chat .chat-app .chat-window .chat-list > div.received.noTail {
   margin-left: 53px;
 }
 
-section.chat
-  .chat-app
-  .chat-window
-  .chat-list
-  div.chat-image-wrapper.sent.noTail {
+section.chat .chat-app .chat-window .chat-list > div.sent.noTail {
   margin-right: 53px;
 }
 
-section.chat .chat-app .chat-window .chat-list span.received.noTail {
-  margin-left: 53px;
-}
-
-section.chat .chat-app .chat-window .chat-list span.sent.noTail {
-  margin-right: 53px;
-}
-
-section.chat .chat-app .chat-window .chat-list div.noTail {
+section.chat .chat-app .chat-window .chat-list > div.noTail {
   margin-bottom: 6px;
 }
 
@@ -780,7 +765,7 @@ section.chat .chat-app .chat-window .chat-utils .image-upload {
 }
 
 section.chat .chat-app .chat-window .chat-utils .image-upload .blur {
-  height: 250px;
+  height: 100%;
   width: 100%;
   position: absolute;
   top: 0;
@@ -824,9 +809,8 @@ section.chat .chat-app .chat-window .chat-utils .image-upload svg.delete-btn {
 section.chat .chat-app .chat-window .chat-utils .image-upload .image-preview {
   border-radius: 8px;
   object-fit: contain;
-  height: 250px;
-  min-width: 250px;
-  max-width: 600px;
+  max-height: 250px;
+  max-width: 450px;
 }
 
 section.chat .chat-app .chat-window .chat-utils .chat-utils-b {
@@ -909,6 +893,18 @@ section.animate {
 
 .hidden {
   display: none;
+}
+
+.toast {
+  position: absolute;
+  bottom: 107px;
+  right: 20px;
+  opacity: 0;
+  padding: 1rem 1.5rem;
+  background-color: #db1d70;
+  border-radius: 8px;
+  z-index: 999;
+  transition: 0.4s;
 }
 
 /* @media screen and (max-height: 400px) {
