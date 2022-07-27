@@ -285,7 +285,10 @@ const removeFiles = () => {
 fileSelector.onchange = (e) => {
   if (!e.target.files[0]) return;
   if (e.target.files[0].size > 1048487) {
-    showToast('Please select a file under 1 MB.', { bottomOffset: '87px' });
+    showToast('Please select a file under 1 MB.', {
+      bottomOffset: '87px',
+      timeOut: 3000,
+    });
     removeFiles();
   } else {
     const fileReader = new FileReader();
