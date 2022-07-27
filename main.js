@@ -32,6 +32,7 @@ const app = initializeApp({
 // TODO mplement one to one chatting
 
 const timeOut = {};
+const globalData = {};
 
 const root = document.querySelector('#app');
 const userImg = document.querySelector('section.login .data img.user-img');
@@ -70,6 +71,9 @@ const fileSelector = document.querySelector(
 const chatSendButton = document.querySelector(
   'section.chat .chat-app .chat-window .chat-utils .chat-utils-b button.send-button'
 );
+const searchFilterInput = document.querySelector(
+  'section.chat .chat-app .sidebar .search .input-field input'
+);
 const chatInputField = document.querySelector(
   '#app > section > div > div.chat-window > div.chat-utils > div > input'
 );
@@ -98,6 +102,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const collectionRef = collection(db, 'messages');
 let receiverUID = '';
+let filterField = '';
 
 const showToast = (
   message,
@@ -275,6 +280,47 @@ const loadMessages = (messages) => {
   }, 1000);
 };
 
+const loadChats = (users, inputVal) => {
+  const chatsList = [];
+  const filteredUsers = users.docs.filter((user) =>
+    inputVal
+      ? user.data().userName.includes(inputVal) ||
+        user.data().userEmail.includes(inputVal)
+      : true
+  );
+  chatsList.push(
+    createUser({
+      displayName: 'Velle Log',
+      userEmail: 'vellelog@group.com',
+      userUID: null,
+      status: 'online',
+      isDefault: true,
+      chatUserImg,
+      chatUserName,
+      chatUserStatus,
+      changeReceiverUID: changeReceiverUID,
+    })
+  );
+  filteredUsers.forEach((user) => {
+    if (user.id === auth.currentUser.uid) return;
+    const { userName: displayName, photoURL, userEmail } = user.data();
+    chatsList.push(
+      createUser({
+        displayName,
+        photoURL,
+        userEmail,
+        userUID: user.id,
+        status: 'online',
+        chatUserImg,
+        chatUserName,
+        chatUserStatus,
+        changeReceiverUID: changeReceiverUID,
+      })
+    );
+  });
+  chats.replaceChildren(...chatsList);
+};
+
 const removeFiles = () => {
   fileSelector.value = null;
   imagePreviewDiv.style.display = 'none';
@@ -360,39 +406,12 @@ const continueToChat = () => {
   onSnapshot(
     query(collection(db, 'users'), orderBy('loginDate', 'desc')),
     (users) => {
-      const chatsList = [];
-      chatsList.push(
-        createUser({
-          displayName: 'Velle Log',
-          userEmail: 'vellelog@group.com',
-          userUID: null,
-          status: 'online',
-          isDefault: true,
-          chatUserImg,
-          chatUserName,
-          chatUserStatus,
-          changeReceiverUID: changeReceiverUID,
-        })
-      );
-      users.docs.forEach((user) => {
-        if (user.id === auth.currentUser.uid) return;
-        const { userName: displayName, photoURL, userEmail } = user.data();
-        chatsList.push(
-          createUser({
-            displayName,
-            photoURL,
-            userEmail,
-            userUID: user.id,
-            status: 'online',
-            chatUserImg,
-            chatUserName,
-            chatUserStatus,
-            changeReceiverUID: changeReceiverUID,
-          })
-        );
-      });
-      chats.replaceChildren(...chatsList);
+      globalData['users'] = users;
+      loadChats(users);
     }
+  );
+  searchFilterInput.addEventListener('input', (e) =>
+    loadChats(globalData['users'], e.currentTarget.value)
   );
   chatInputField.focus();
 };
