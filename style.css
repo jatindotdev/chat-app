@@ -103,6 +103,8 @@ img,
 picture {
   max-width: 100%;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* Inherit fonts for inputs and buttons */
