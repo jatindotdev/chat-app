@@ -656,7 +656,26 @@ section
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+section
+  > div
+  > div.chat-window
+  > div.chat-wrapper
+  > div.chat-list
+  > div.sent
+  > div.chat-container {
   align-items: flex-end;
+}
+
+section
+  > div
+  > div.chat-window
+  > div.chat-wrapper
+  > div.chat-list
+  > div.received
+  > div.chat-container {
+  align-items: flex-start;
 }
 
 section.chat .chat-app .chat-window .chat-list .shared {
