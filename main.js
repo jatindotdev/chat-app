@@ -46,6 +46,10 @@ const signOutButton = document.querySelector('section.login button.sign-out');
 const bottomMsg = document.querySelector(
   'section.login .login-card span.bottom-msg'
 );
+const toggleChatButton = document.querySelectorAll(
+  'section.chat .chat-app button.open-chat'
+);
+const sidebar = document.querySelector('.sidebar');
 const chats = document.querySelector('section.chat .chat-app .user-chats');
 const chatDisplayPicture = document.querySelector(
   'section.chat .chat-app .sidebar .menu img.user-img'
@@ -102,7 +106,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const collectionRef = collection(db, 'messages');
 let receiverUID = '';
-let filterField = '';
 
 const showToast = (
   message,
@@ -388,8 +391,8 @@ chatSendButton.addEventListener('click', () => {
 const changeReceiverUID = async (UID) => {
   if (UID) receiverUID = UID;
   else receiverUID = '';
-  const data = await getDocs(query(collectionRef, orderBy('createdAt')));
-  loadMessages(data.docs.map((message) => message.data()));
+  loadMessages(globalData['messages'].docs.map((message) => message.data()));
+  sidebar.classList.remove('active');
 };
 
 const continueToChat = () => {
@@ -401,6 +404,7 @@ const continueToChat = () => {
     chatSection.classList.add('animate');
   }, 0);
   onSnapshot(query(collectionRef, orderBy('createdAt')), (data) => {
+    globalData['messages'] = data;
     loadMessages(data.docs.map((message) => message.data()));
   });
   onSnapshot(
@@ -456,6 +460,13 @@ const setData = async (user) => {
   loginButton.addEventListener('click', continueToChat);
   signOutButton.style.display = 'inherit';
   signOutButton.addEventListener('click', signOut);
+  toggleChatButton.forEach((toggleButton) => {
+    toggleButton.addEventListener('click', () => {
+      sidebar.classList.contains('active')
+        ? sidebar.classList.remove('active')
+        : sidebar.classList.add('active');
+    });
+  });
   timeOut.timer = setTimeout(continueToChat, 1000);
   window.addEventListener('mousemove', mouseMoveEvent);
   window.addEventListener('keyup', chatEvents);
