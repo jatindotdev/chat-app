@@ -764,7 +764,7 @@ section.chat .chat-app .chat-window .chat-list > div.sent.noTail {
 }
 
 section.chat .chat-app .chat-window .chat-list > div.noTail {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 section.chat .chat-app .chat-window .chat-list .noTail::before,
@@ -961,6 +961,10 @@ section.animate {
   section.chat .chat-app .chat-window {
     height: 100%;
     width: 100%;
+  }
+
+  section.chat .chat-app .chat-window .chat-list div img.chat-img {
+    max-width: 275px;
   }
 }
 
