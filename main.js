@@ -280,7 +280,7 @@ const loadMessages = (messages) => {
         '#app > section > div > div.chat-window > div.chat-wrapper > div > div.scrollTo'
       )
       .scrollIntoView();
-  }, 1000);
+  }, 100);
 };
 
 const loadChats = (users, inputVal) => {
