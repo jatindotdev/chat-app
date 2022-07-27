@@ -987,6 +987,11 @@ section.animate {
     transition: 0.4s;
   }
 
+  section.chat .chat-app .chat-window .chat-utils .image-upload {
+    margin: auto;
+    margin-bottom: 1.5rem;
+  }
+
   section.chat .chat-app button.open-chat {
     display: flex;
   }
