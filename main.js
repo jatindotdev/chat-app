@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps } from 'firebase/app';
 import {
   GoogleAuthProvider,
   getAuth,
@@ -15,21 +15,20 @@ import {
   setDoc,
   doc,
   getDoc,
-  getDocs,
   serverTimestamp,
 } from 'firebase/firestore';
 import { createUser } from './utils/createUser';
 
-const app = initializeApp({
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: 'chat-withme-firebase.firebaseapp.com',
-  projectId: 'chat-withme-firebase',
-  storageBucket: 'chat-withme-firebase.appspot.com',
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
-});
-
-// TODO mplement one to one chatting
+if (!getApps().length) {
+  initializeApp({
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: 'chat-withme-firebase.firebaseapp.com',
+    projectId: 'chat-withme-firebase',
+    storageBucket: 'chat-withme-firebase.appspot.com',
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID,
+  });
+}
 
 const timeOut = {};
 const globalData = {};
@@ -102,8 +101,8 @@ const loader = document.querySelector('.loader');
 chatSection.remove();
 
 // Globals
-const auth = getAuth(app);
-const db = getFirestore(app);
+const auth = getAuth();
+const db = getFirestore();
 const collectionRef = collection(db, 'messages');
 let receiverUID = '';
 
